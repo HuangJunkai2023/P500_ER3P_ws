@@ -1,0 +1,6 @@
+[submodule "src/xCoreSDK-CPP"]
+	path = src/xCoreSDK-CPP
+	url = https://github.com/RokaeRobot/xCoreSDK-CPP.git
+[submodule "src/xCoreSDK-Python"]
+	path = src/xCoreSDK-Python
+	url = https://github.com/RokaeRobot/xCoreSDK-Python.git
