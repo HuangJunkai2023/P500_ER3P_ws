@@ -6,4 +6,4 @@
 	url = https://github.com/RokaeRobot/xCoreSDK-Python.git
 [submodule "src/tidybot2"]
 	path = src/tidybot2
-	url = https://github.com/jimmyyhwu/tidybot2.git
+	url = https://github.com/HuangJunkai2023/tidybot2.git
