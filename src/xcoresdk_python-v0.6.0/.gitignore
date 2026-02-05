@@ -1,0 +1,5 @@
+_rokae_log_/
+__pycache__/
+logs/
+py312/
+.vscode/
