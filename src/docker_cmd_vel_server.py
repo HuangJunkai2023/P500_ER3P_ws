@@ -42,7 +42,9 @@ def main():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--udp-port", type=int, default=15000)
     parser.add_argument("--stop-timeout", type=float, default=0.2)
-    parser.add_argument("--publish", action="store_true", default=False)
+    parser.add_argument("--publish", action="store_true", default=True)
+    parser.add_argument("--publish-rate", type=float, default=30.0)
+    parser.add_argument("--log", action="store_true", default=False)
     parser.add_argument("--no-ros", action="store_true", default=False)
     args, unknown = parser.parse_known_args()
 
@@ -54,6 +56,11 @@ def main():
     publish_cmd_vel = args.publish
     if "publish" in ros_params:
         publish_cmd_vel = ros_params.get("publish", "true").lower() == "true"
+
+    publish_rate = float(ros_params.get("publish_rate", args.publish_rate))
+    log_enabled = args.log
+    if "log" in ros_params:
+        log_enabled = ros_params.get("log", "false").lower() == "true"
 
     use_ros = publish_cmd_vel and not args.no_ros
 
@@ -93,7 +100,10 @@ def main():
     last_cmd_time = 0.0
     last_twist = Twist()
 
-    print(f"[UDP] Listening on 0.0.0.0:{udp_port} (publish={publish_cmd_vel})", flush=True)
+    print(
+        f"[UDP] Listening on 0.0.0.0:{udp_port} (publish={publish_cmd_vel}, rate={publish_rate}Hz)",
+        flush=True,
+    )
 
     def receiver():
         nonlocal last_cmd_time, last_twist
@@ -108,11 +118,12 @@ def main():
             if cmd is None:
                 continue
             linear_x, angular_z = cmd
-            ts = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(
-                f"[{ts}] [UDP] {addr[0]}:{addr[1]} -> linear_x={linear_x:.3f}, angular_z={angular_z:.3f}",
-                flush=True,
-            )
+            if log_enabled:
+                ts = time.strftime("%Y-%m-%d %H:%M:%S")
+                print(
+                    f"[{ts}] [UDP] {addr[0]}:{addr[1]} -> linear_x={linear_x:.3f}, angular_z={angular_z:.3f}",
+                    flush=True,
+                )
             twist = Twist()
             twist.linear.x = linear_x
             twist.angular.z = angular_z
@@ -135,7 +146,7 @@ def main():
                     pub.publish(Twist())
                 else:
                     pub.publish(last_twist)
-            time.sleep(0.05)
+            time.sleep(1.0 / max(publish_rate, 1.0))
     except KeyboardInterrupt:
         on_shutdown("keyboard")
 

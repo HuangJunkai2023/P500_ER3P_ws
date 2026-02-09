@@ -19,7 +19,7 @@ KEY_BINDINGS = {
 }
 
 
-def get_key(timeout_sec=0.05):
+def get_key(timeout_sec=0.01):
     if select.select([sys.stdin], [], [], timeout_sec)[0]:
         return sys.stdin.read(1)
     return ""
@@ -29,10 +29,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", default="127.0.0.1", help="Docker host IP")
     parser.add_argument("--port", type=int, default=15000, help="UDP port")
-    parser.add_argument("--linear", type=float, default=0.1, help="Linear x m/s")
-    parser.add_argument("--angular", type=float, default=0.3, help="Angular z rad/s")
-    parser.add_argument("--rate", type=float, default=20.0, help="Send rate Hz")
+    parser.add_argument("--linear", type=float, default=0.15, help="Linear x m/s")
+    parser.add_argument("--angular", type=float, default=0.2, help="Angular z rad/s")
+    parser.add_argument("--rate", type=float, default=30.0, help="Send rate Hz")
     parser.add_argument("--stop-timeout", type=float, default=0.05, help="Stop after idle seconds")
+    parser.add_argument("--key-timeout", type=float, default=0.01, help="Key poll timeout seconds")
     args = parser.parse_args()
 
     if not sys.stdin.isatty():
@@ -54,8 +55,9 @@ def main():
     last_payload = b"0.0 0.0"
 
     try:
+        next_send = time.monotonic()
         while True:
-            key = get_key(timeout_sec=interval)
+            key = get_key(timeout_sec=args.key_timeout)
             if key:
                 key = key.lower()
                 if key == "q":
@@ -70,8 +72,10 @@ def main():
             if time.time() - last_cmd_time > args.stop_timeout:
                 last_payload = b"0.0 0.0"
 
-            sock.sendto(last_payload, (args.host, args.port))
-            time.sleep(interval)
+            now = time.monotonic()
+            if now >= next_send:
+                sock.sendto(last_payload, (args.host, args.port))
+                next_send = now + interval
     finally:
         sock.sendto(b"0.0 0.0", (args.host, args.port))
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
