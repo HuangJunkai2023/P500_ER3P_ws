@@ -18,6 +18,7 @@ set(EXAMPLES
     read_robot_state
     force_control_commands
     communication_example
+    drag_teach_print_pose
     modbusRTU_endtool_control
     )
 

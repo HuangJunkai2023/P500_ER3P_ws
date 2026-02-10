@@ -1,0 +1,3031 @@
+目录
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve">TOC \o &quot;1-3&quot; \h \u </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6616 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/><w:bCs/><w:szCs w:val="52"/></w:rPr><w:t xml:space="preserve">1. 
+S
+DK
+文档说明
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6616 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>7
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2815 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2. 
+EPG类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2815 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>7
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1094 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.1. 
+串口搜索
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1094 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>7
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7464 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.2. 
+串口操作
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7464 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>7
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc17296 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.3. 
+状态查询
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc17296 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>8
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16286 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.4. 
+写入寄存器
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16286 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>9
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc30291 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.5. 
+使能夹爪
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc30291 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>9
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc10125 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.6. 
+无参数运行指令
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc10125 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>10
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc20992 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.7. 
+有参数运行指令
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc20992 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>10
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7600 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.8. 
+从站修改
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7600 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>11
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2361 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.9. 
+波特率修改
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2361 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>11
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc3015 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.10. 
+编码器对零
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc3015 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>11
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc25041 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.11. 
+选择模式
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc25041 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>12
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc32520 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.12. 
+获取当前夹爪状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc32520 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>12
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc24592 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.13. 
+获取夹爪当前位置
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc24592 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>13
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc3806 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.14. 
+获取夹爪当前速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc3806 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>13
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc22772 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.15. 
+获取夹爪当前力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc22772 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>14
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc21154 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.16. 
+获取夹爪当前温度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc21154 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>14
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2938 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.17. 
+获取夹爪当前电压
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2938 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>15
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc9791 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">2.18. 
+查询软件版本
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc9791 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>15
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc8504 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">3. 
+RG类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc8504 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>16
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc15585 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">4. 
+EPG-HP类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc15585 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>16
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc14550 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">5. 
+LEPG类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc14550 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>16
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc14873 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6. 
+EVS01类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc14873 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>16
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc28956 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.1. 
+串口搜索
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc28956 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>16
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc3356 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.2. 
+串口操作
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc3356 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>17
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc25014 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.3. 
+状态查询
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc25014 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>17
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc26376 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.4. 
+写入寄存器
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc26376 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>18
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5857 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.5. 
+设备使能
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5857 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>19
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc11353 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.6. 
+启动或停止设备
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc11353 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>19
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc3987 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.7. 
+选择模式
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc3987 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>20
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc753 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.8. 
+写入
+自定义参数
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc753 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>20
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc31204 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.9. 
+获取
+设备当前状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc31204 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>21
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc26968 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.10. 
+获取
+设备当前真空度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc26968 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>21
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1984 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.11. 
+获取
+设备当前温度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1984 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>22
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc26925 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">6.12. 
+获取
+设备当前电压
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc26925 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>22
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc17963 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7. 
+EVS08类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc17963 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>22
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc17876 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.1. 
+串口搜索
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc17876 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>23
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc29597 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.2. 
+串口操作
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc29597 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>23
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc20969 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.3. 
+状态查询
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc20969 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>24
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc30270 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.4. 
+写入寄存器
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc30270 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>24
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc10501 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.5. 
+设备使能
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc10501 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>25
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc22797 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.6. 
+启动或停止设备
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc22797 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>25
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc14540 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.7. 
+选择模式
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc14540 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>26
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc12088 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.8. 
+写入
+自定义参数
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc12088 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>26
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7017 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.9. 
+获取
+设备当前状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7017 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>27
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc30506 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.10. 
+获取
+设备当前真空度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc30506 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>27
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5851 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.11. 
+获取
+设备当前温度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5851 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>28
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc8989 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">7.12. 
+获取
+设备当前电压
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc8989 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>28
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc28612 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8. 
+ERG32类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc28612 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>28
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc23351 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.1. 
+串口搜索
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc23351 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>29
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc29594 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.2. 
+串口操作
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc29594 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>29
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc28014 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.3. 
+状态查询
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc28014 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>30
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc32102 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.4. 
+写入寄存器
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc32102 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>30
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16853 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.5. 
+夹持
+使能
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16853 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>31
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc4468 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.6. 
+旋转使能
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc4468 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>32
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7675 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.7. 
+无参数运行指令
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7675 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>32
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc20396 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.8. 
+有参数运行指令
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc20396 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>33
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6266 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.9. 
+从站修改
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6266 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>34
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc14685 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.10. 
+波特率修改
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc14685 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>34
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc26105 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.11. 
+查询软件版本
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc26105 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>35
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc28361 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.12. 
+获取夹爪
+夹持端当前
+状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc28361 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>35
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc13088 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.13. 
+获取夹爪
+夹持端
+当前位置
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc13088 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>36
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc27062 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.14. 
+获取夹爪
+夹持端
+当前速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc27062 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>36
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6996 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.15. 
+获取夹爪
+加持端
+当前力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6996 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>37
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc9670 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.16. 
+获取夹爪旋转端当前状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc9670 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>38
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2618 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.17. 
+获取夹爪旋转绝对角度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2618 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>38
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc27761 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.18. 
+获取夹爪旋转相对角度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc27761 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>39
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1607 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.19. 
+获取夹爪旋转端当前速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1607 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>39
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc27080 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.20. 
+获取夹爪旋转端当前力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc27080 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>39
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5356 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.21. 
+获取夹爪当前温度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5356 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>40
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6261 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">8.22. 
+获取夹爪当前电压
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6261 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>40
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc11561 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">9. 
+ERG08类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc11561 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>40
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc18066 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10. 
+ELS类型
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc18066 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>41
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc4987 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.1. 
+串口搜索
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc4987 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>41
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16964 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.2. 
+串口操作
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16964 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>41
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc4746 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.3. 
+状态查询
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc4746 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>42
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc29770 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.4. 
+写入寄存器
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc29770 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>43
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc24067 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/><w:lang w:val="en-US"/></w:rPr><w:t xml:space="preserve">10.5. 
+设备重启
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc24067 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>43
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc8155 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.6. 
+参数
+保存
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc8155 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>44
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6526 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.7. 
+恢复默认
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6526 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>44
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc31360 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.8. 
+信号源选择
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc31360 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>44
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2920 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.9. 
+用户控制模式选择
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2920 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>45
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc9178 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/><w:lang w:val="en-US"/></w:rPr><w:t xml:space="preserve">10.10. 
+使能设备
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc9178 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>45
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1081 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.11. 
+清除故障/设备复位
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1081 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>46
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1132 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.12. 
+动作控制
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1132 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>46
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1166 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.13. 
+选择运动方向
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1166 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>47
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5092 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.14. 
+设置预设点位置
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5092 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>47
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16604 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.15. 
+读取预设点位置
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16604 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>48
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc19063 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.16. 
+设置预设点速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc19063 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>48
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc22477 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/><w:lang w:val="en-US"/></w:rPr><w:t xml:space="preserve">10.17. 
+读取预设点速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc22477 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>49
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc24137 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.18. 
+设置预设点力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc24137 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>49
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc30863 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.19. 
+读取预设点力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc30863 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>50
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc13566 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.20. 
+设置原点偏移
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc13566 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>50
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc24735 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.21. 
+读取相对运动距离
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc24735 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>51
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc29410 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.22. 
+设置点动步进值
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc29410 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>51
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5328 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.23. 
+读取点动步进值
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5328 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>52
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7250 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/><w:lang w:val="en-US"/></w:rPr><w:t xml:space="preserve">10.24. 
+设置减速段位置百分比
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7250 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>52
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6044 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.25. 
+读取减速段位置百分比
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6044 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>53
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc9021 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.26. 
+设置减速段速度百分比
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc9021 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>53
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc12042 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.27. 
+读取减速段速度百分比
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc12042 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>54
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc18947 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.28. 
+设置减速段作用方向
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc18947 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>54
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7849 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.29. 
+获取减速段作用方向
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7849 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>55
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc19962 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.30. 
+设置IO强制输出
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc19962 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>55
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc7786 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.31. 
+获取IO强制输出
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc7786 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>56
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc8030 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.32. 
+抱闸强制打开
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc8030 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>56
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc23916 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.33. 
+修改设备从站地址
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc23916 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>57
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc22901 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.34. 
+修改设备波特率
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc22901 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>57
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc6126 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.35. 
+获取设备运行状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc6126 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>58
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc1332 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.36. 
+获取设备动作状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc1332 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>58
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16899 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.37. 
+获取设备当前位置
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16899 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>59
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc16806 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.38. 
+获取设备当前速度
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc16806 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>60
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc5311 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.39. 
+获取设备当前力矩
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc5311 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>60
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc2269 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.40. 
+获取设备故障状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc2269 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>60
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc31221 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.41. 
+获取电机故障状态
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc31221 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>61
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc15685 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.42. 
+获取IO输入监测
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc15685 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>62
+<w:tab w:val="right" w:leader="dot" w:pos="9740"/></w:tabs></w:pPr><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:instrText xml:space="preserve"> HYPERLINK \l _Toc29376 </w:instrText></w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:rFonts w:hint="default"/></w:rPr><w:t xml:space="preserve">10.43. 
+获取IO输出监测
+</w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF _Toc29376 \h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>62
+S
+DK
+文档说明
+C
+/C++
+版本说明：
+</w:r><w:r><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr><w:t>通过钧舵官网下载C或C
+++
+版本压缩包后并解压，通过导入
+jodellTool.dll
+来实现对应函数的调用。
+EPG类型
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+串口搜索
+函数原形：
+使用示例：
+int* 
+com
+L
+ist
+ 
+=
+ 
+getComPort
+ ();
+串口操作
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, true); # 
+连接
+int
+ 
+status =
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, f
+alse
+) ;# 
+断开连接
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作异常
+状态查询
+函数原形：
+使用示例：
+int
+* 
+status
+ 
+=
+ getStatus(
+0, 
+9, 2000, 3
+，
+2); //
+以0
+3
+的方式读取id为9的夹爪中起始地址为2
+000
+的2个寄存器的数据
+如果status[
+0] = -1
+则数据读取异常，另外返回值为int型数组，以上述案例而言返回的数组中有效值为前四个数据
+写入寄存器
+函数原形：
+使用示例：
+data[] = {1, 2};
+int
+ 
+status
+ 
+=
+ 
+writeDataToRegister
+ (
+0, 
+9
+,
+ 1000, 
+data, 2
+); //
+向站点为9号的夹爪，地址为1
+000
+的寄存器中写入数据1，地址为1
+001
+的寄存器中写入数据2
+, 2
+代表要写入的寄存器个数
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+使能夹爪
+函数原形：
+使用示例：
+int status 
+=
+ 
+clawEnable(
+0, 
+9
+,
+ 
+t
+rue); // 
+使能
+id
+为
+9
+的夹爪
+int status
+ =
+ clawEnable(
+0, 
+9, 
+f
+alse); // 
+id为9的夹爪去使能
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+无参数运行指令
+函数原形：
+使用示例：
+int status
+ =
+ runWithoutParam(
+0, 
+9, 1)
+； 
+// 
+id为9的夹爪以预设命令编号1执行
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+有参数运行指令
+函数原形：
+使用示例：
+int status 
+=
+ runWithParam(
+0, 
+9, 255, 255, 255);  // 
+id为9的夹爪以2
+55
+的力矩，最大2
+55
+的速度运动到2
+55
+的位置
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+从站修改
+函数原形：
+使用示例：
+int status
+ =
+ 
+change
+S
+alveId
+(
+0, 
+9, 8)
+;
+  // 
+将夹爪的从站从9改为8
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+波特率修改
+函数原形：
+使用示例：
+int status
+ =
+ changeBaudRate(
+0, 
+9, 0)
+；/
+/ 
+将id为9的夹爪的波特率改为1
+15200
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+编码器对零
+函数原形：
+使用示例：
+int status
+ =
+ clawEncoderZero(
+0, 
+9)
+；/
+/ 
+将id为9的夹爪进行编码器对零
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+选择模式
+函数原形：
+使用示例：
+int status
+ =
+ 
+switchMode
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+从站地址为9的设备的控制模式设置为IO控制模式
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取当前夹爪状态
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurrentStatus(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪状态
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前位置
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurrentL
+ocation
+ (
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前位置
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前速度
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+S
+peed
+ (
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前速度
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前力矩
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+T
+orque
+ (
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前力矩
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前温度
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+T
+emperature
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前温度
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前电压
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+V
+oltage
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前电压
+若s
+tatus
+等于-
+1
+则数据异常
+查询软件版本
+函数原形：
+使用示例：
+int* 
+version
+ 
+=
+ querySoftwareVersion (
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪版本信息
+如果version
+ 
+[
+0] = -1
+则数据读取异常，另外返回值为int型数组
+RG类型
+同EPG类型
+EPG-HP类型
+同EPG类型
+LEPG类型
+预留
+EVS01类型
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+串口搜索
+函数原形：
+使用示例：
+int* 
+com
+L
+ist
+ 
+=
+ 
+getComPort
+ ();
+串口操作
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, true); # 
+连接
+int
+ 
+status =
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, f
+alse
+) ;# 
+断开连接
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作异常
+状态查询
+函数原形：
+使用示例：
+int
+* 
+status
+ 
+=
+ getStatus(
+0, 
+9, 2000, 3
+，
+2); //
+以0
+3
+的方式读取id为9的夹爪中起始地址为2
+000
+的2个寄存器的数据
+如果status[
+0] = -1
+则数据读取异常，另外返回值为int型数组，以上述案例而言返回的数组中有效值为前四个数据
+写入寄存器
+函数原形：
+使用示例：
+data[] = {1, 2};
+int
+ 
+status
+ 
+=
+ 
+writeDataToRegister
+ (
+0, 
+9
+,
+ 1000, 
+data, 2
+); //
+向站点为9号的夹爪，地址为1
+000
+的寄存器中写入数据1，地址为1
+001
+的寄存器中写入数据2
+, 2
+代表要写入的寄存器个数
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+设备使能
+函数原形：
+使用示例：
+int status
+ =
+ 
+enableDeviceOfEvs
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+使能从站地址为9的设备
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+启动或停止设备
+函数原形：
+使用示例：
+int status
+ =
+ 
+startOrStopDeviceOfEvs
+(
+0, 
+9, 
+1, 1,1
+)
+；/
+/ 
+以高级模式、破真空方式运行从站地址为9的设备
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+选择模式
+函数原形：
+使用示例：
+int status
+ =
+ 
+switchModeOfEvs
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+从站地址为9的设备的控制模式设置为IO控制模式
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+写入
+自定义参数
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ 
+writeCustomParamOfEvs
+(
+0, 
+9
+,
+ 
+60
+, 
+50, 2
+); //
+设置从站地址为9的设备运行最大气压值60，最小气压值50，超时时间2
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取
+设备当前状态
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentStateOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备
+状态
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前真空度
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentVacuumDegreeOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备当前真空度
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前温度
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentTemperatureOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备当前温度
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前电压
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentVoltageOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备当前电压
+若s
+tatus
+等于-
+1
+则数据异常
+EVS08类型
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+串口搜索
+函数原形：
+使用示例：
+int* 
+com
+L
+ist
+ 
+=
+ 
+getComPort
+ ();
+串口操作
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, true); # 
+连接
+int
+ 
+status =
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, f
+alse
+) ;# 
+断开连接
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作异常
+状态查询
+函数原形：
+使用示例：
+int
+* 
+status
+ 
+=
+ getStatus(
+0, 
+9, 2000, 3
+，
+2); //
+以0
+3
+的方式读取id为9的夹爪中起始地址为2
+000
+的2个寄存器的数据
+如果status[
+0] = -1
+则数据读取异常，另外返回值为int型数组，以上述案例而言返回的数组中有效值为前四个数据
+写入寄存器
+函数原形：
+使用示例：
+data[] = {1, 2};
+int
+ 
+status
+ 
+=
+ 
+writeDataToRegister
+ (
+0, 
+9
+,
+ 1000, 
+data, 2
+); //
+向站点为9号的夹爪，地址为1
+000
+的寄存器中写入数据1，地址为1
+001
+的寄存器中写入数据2
+, 2
+代表要写入的寄存器个数
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+设备使能
+函数原形：
+使用示例：
+int status
+ =
+ 
+enableDeviceOfEvs
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+使能从站地址为9的设备
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+启动或停止设备
+函数原形：
+使用示例：
+int status
+ =
+ 
+startOrStopDeviceOfEvs
+2
+(
+0, 
+9, 
+1, 1, 0, 1
+)
+；/
+/ 
+以高级模式、破真空方式运行从站地址为9的设备的所有通道
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+选择模式
+函数原形：
+使用示例：
+int status
+ =
+ 
+switchModeOfEvs
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+从站地址为9的设备的控制模式设置为IO控制模式
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+写入
+自定义参数
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ 
+writeCustomParamOfEvs
+2
+(
+0, 
+9
+,
+ 
+1
+，
+60
+, 
+50, 2
+); //
+设置从站地址为9的设备通道1运行最大气压值60，最小气压值50，超时时间2
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取
+设备当前状态
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentStateOfEvs
+2
+(
+0, 
+9
+, 1
+)
+；/
+/ 
+获取站点为9的
+设备的通道1的
+状态
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前真空度
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentVacuumDegreeOfEvs
+2
+(
+0, 
+9)
+；/
+/ 
+获取站点为9的
+设备的通道1的当前真空度
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前温度
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentTemperatureOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备当前温度
+若s
+tatus
+等于-
+1
+则数据异常
+获取
+设备当前电压
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceCurrentVoltageOfEvs
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备当前电压
+若s
+tatus
+等于-
+1
+则数据异常
+ERG32类型
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+串口搜索
+函数原形：
+使用示例：
+int* 
+com
+L
+ist
+ 
+=
+ 
+getComPort
+ ();
+串口操作
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, true); # 
+连接
+int
+ 
+status =
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, f
+alse
+) ;# 
+断开连接
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作异常
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+状态查询
+函数原形：
+使用示例：
+int
+* 
+status
+ 
+=
+ getStatus(
+0, 
+9, 2000, 3
+，
+2); //
+以0
+3
+的方式读取id为9的夹爪中起始地址为2
+000
+的2个寄存器的数据
+如果status[
+0] = -1
+则数据读取异常，另外返回值为int型数组，以上述案例而言返回的数组中有效值为前四个数据
+写入寄存器
+函数原形：
+使用示例：
+data[] = {1, 2};
+int
+ 
+status
+ 
+=
+ 
+writeDataToRegister
+ (
+0, 
+9
+,
+ 1000, 
+data, 2
+); //
+向站点为9号的夹爪，地址为1
+000
+的寄存器中写入数据1，地址为1
+001
+的寄存器中写入数据2
+, 2
+代表要写入的寄存器个数
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+夹持
+使能
+函数原形：
+使用示例：
+int status 
+=
+ 
+clawEnable(
+0, 
+9
+,
+ 
+t
+rue); // 
+使能
+id
+为
+9
+的夹爪
+int status
+ =
+ clawEnable(
+0, 
+9, 
+f
+alse); // 
+id为9的夹爪去使能
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+旋转使能
+函数原形：
+使用示例：
+int status 
+=
+ 
+rotateEnable(
+0, 
+9
+,
+ 
+t
+rue);  // 
+使能
+id
+为
+9
+的夹爪
+int status
+ =
+ 
+rotateEnable
+ (
+0, 
+9, 
+f
+alse);  // 
+id为9的夹爪去使能
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+无参数运行指令
+E
+RG32
+夹持端
+函数原形：
+使用示例：
+int status
+ =
+ runWithoutParam(
+0, 
+9, 1)
+； 
+// 
+id为9的夹爪以预设命令编号1执行
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+E
+RG32
+旋转端
+函数原形：
+使用示例：
+int status
+ =
+ 
+rotate
+WithoutParam(
+0, 
+9, 1)
+； 
+// 
+id为9的夹爪以预设命令编号1执行
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+有参数运行指令
+ERG32夹持端
+函数原形：
+使用示例：
+int status 
+=
+ runWithParamO
+f
+E
+rg
+32(
+0, 
+9, 255, 255, 255);  // 
+id为9的夹爪以2
+55
+的力矩，最大2
+55
+的速度运动到2
+55
+的位置
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+ERG32旋转端
+函数原形：
+使用示例：
+int status
+ =
+ r
+otate
+WithParam(
+0, 
+9, 360, 255, 255
+,
+ 
+false,
+ 0);  //
+id为9的夹爪以2
+55
+的力矩，最大2
+55
+的速度顺时针运动3
+60
+度（相对位置）
+int status
+ =
+ r
+otate
+WithParam(
+0, 
+9, 360, 255, 255
+,
+ 
+true,
+ 1) ;  // 
+id为9的夹爪以2
+55
+的力矩，最大2
+55
+的速度顺时针运动3
+60
+度（绝对位置），并且多运动一圈
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+从站修改
+函数原形：
+使用示例：
+int status
+ =
+ 
+change
+S
+alveId
+O
+f
+E
+rg
+32 (
+0, 
+9, 8)
+;
+  // 
+将夹爪的从站从9改为8
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+波特率修改
+函数原形：
+使用示例：
+int status
+ =
+ changeBaudRateO
+f
+E
+rg
+32(
+0, 
+9, 0)
+；/
+/ 
+将id为9的夹爪的波特率改为1
+15200
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+查询软件版本
+函数原形：
+使用示例：
+int* 
+version
+ 
+=
+ 
+querySoftwareVersionOfErg32
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪版本信息
+如果version
+ 
+[
+0] = -1
+则数据读取异常，另外返回值为int型数组
+获取夹爪
+夹持端当前
+状态
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurrentStatusO
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪状态
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪
+夹持端
+当前位置
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurrentL
+ocation
+ O
+f
+E
+rg
+32(
+0, 
+9)
+;
+ 
+/
+/
+获取站点为9号的夹爪当前位置
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪
+夹持端
+当前速度
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+S
+peed
+O
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前速度
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪
+加持端
+当前力矩
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+T
+orque
+O
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前力矩
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪旋转端当前状态
+        
+使用示例：
+int status
+ =
+ get
+Rotate
+CurrentStatusO
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪状态
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪旋转绝对角度
+          
+int status
+ =
+ 
+getCurrentAbsAngleOfErg32
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪
+旋转绝对角度
+若s
+tatus
+等于
+65536
+则数据异常
+获取夹爪旋转相对角度
+          
+int status
+ =
+ 
+getCurrentRelAngleOfErg32
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪
+旋转相对角度
+若s
+tatus
+等于
+65536
+则数据异常
+获取夹爪旋转端当前速度
+        
+使用示例：
+int status
+ =
+ 
+getRotateCurrentSpeedOfErg32
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪
+当前旋转速度
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪旋转端当前力矩
+int status
+ =
+ 
+getRotateCurrentTorqueOfErg32
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪
+旋转力矩
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前温度
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+T
+emperature
+O
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前温度
+若s
+tatus
+等于-
+1
+则数据异常
+获取夹爪当前电压
+函数原形：
+使用示例：
+int status
+ =
+ getClawCurren
+t
+V
+oltage
+O
+f
+E
+rg
+32(
+0, 
+9)
+；/
+/ 
+获取站点为9号的夹爪当前电压
+若s
+tatus
+等于-
+1
+则数据异常
+ERG08类型
+同ERG32机型
+ELS类型
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+串口搜索
+函数原形：
+使用示例：
+int* 
+com
+L
+ist
+ 
+=
+ 
+getComPort
+ ();
+串口操作
+函数原形：
+使用示例：
+int
+ 
+status
+ 
+=
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, true); # 
+连接
+int
+ 
+status =
+ serialOperation(
+comIndex, 
+portNo
+, baudRate, f
+alse
+) ;# 
+断开连接
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作异常
+comIndex参数说明：
+串口编码数量，同时最大可支持实现8个串口，串口编号为0~7
+如：实际使用时存在COM1、COM2、COM3三个串口，调用串口操作函数时
+serialOperation(
+0, 1
+, 
+115200
+, true)
+、
+serialOperation(
+1, 2
+ 
+115200
+, true)
+、
+serialOperation(
+2, 3
+, 
+115200
+, true)
+，
+将COM1串口赋予编号0，将COM2串口赋予编号1，将COM3串口赋予编号2
+状态查询
+函数原形：
+使用示例：
+int
+* 
+status
+ 
+=
+ getStatus(
+0, 
+9, 2000, 3
+，
+2); //
+以0
+3
+的方式读取id为9的夹爪中起始地址为2
+000
+的2个寄存器的数据
+如果status[
+0] = -1
+则数据读取异常，另外返回值为int型数组，以上述案例而言返回的数组中有效值为前四个数据
+写入寄存器
+函数原形：
+使用示例：
+data[] = {1, 2};
+int
+ 
+status
+ 
+=
+ 
+writeDataToRegister
+ (
+0, 
+9
+,
+ 1000, 
+data, 2
+); //
+向站点为9号的夹爪，地址为1
+000
+的寄存器中写入数据1，地址为1
+001
+的寄存器中写入数据2
+, 2
+代表要写入的寄存器个数
+若status等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+设备重启
+函数原形：
+使用示例：
+int status 
+=
+e
+nable
+DeviceOfEls
+(
+0, 
+9); // 
+重启
+id
+为
+9
+的
+设备
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+参数
+保存
+函数原形：
+使用示例：
+int status
+ =
+ 
+saveParamOfEls
+(
+0, 
+9)
+； 
+// 
+从站地址为9的设备执行保存参数指令
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+恢复默认
+函数原形：
+使用示例：
+int status
+ =
+ 
+restoreDefaultOfEls
+(
+0
+, 
+9
+) # 
+id为9的
+设备执行恢复默认参数指令
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+信号源选择
+函数原形：
+使用示例：
+int status
+ =
+ 
+chooseSignalSourceOfEls
+(
+0
+, 
+9, 1
+)
+;
+  // 
+将
+从站地址为9的设备信号源切换为485控制
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+用户控制模式选择
+函数原形：
+使用示例：
+int status
+ =
+ 
+chooseUserControlModeOfEls
+(0
+, 
+9, 
+1
+)
+；/
+/ 
+将
+从站地址为9的设备控制模式改为点动模式
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+使能设备
+函数原形：
+使用示例：
+int status
+ =
+ 
+enableDeviceOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/
+使能从站地址为9的设备
+ 
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+清除故障/设备复位
+函数原形：
+使用示例：
+int status
+ =
+ 
+resetDeviceOfEls
+(
+0, 9
+)
+；/
+/ 
+复位从站地址为9的设备
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+动作控制
+函数原形：
+使用示例：
+int status
+ =
+ 
+controlActionOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+从站地址为9的设备的执行点1命令
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+选择运动方向
+函数原形：
+使用示例：
+int status
+ =
+ 
+chooseMotorDirdctionOfEls
+(
+0
+, 
+9, 1
+)
+；/
+/ 
+设置从站地址为9的设备运动方向为正向运动
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+设置预设点位置
+函数原形：
+使用示例：
+int status
+ =
+ 
+setPointPositionOfEls
+(
+0, 
+9, 
+0, 1000
+)
+；/
+/ 
+设置从站地址为9的设备的预设点1的位置为10mm
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取预设点位置
+函数原形：
+使用示例：
+int status
+ =
+ 
+readPointPositionOfEls
+(
+0, 
+9
+, 1
+)
+；/
+/ 
+读取从站地址为9的设备的预设点1的位置
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置预设点速度
+函数原形：
+使用示例：
+int status
+ =
+ 
+setPointSpeedOfEls
+(
+0, 
+9, 
+2, 1000
+)
+；/
+/ 
+设置从站地址为9的设备的预设点2的速度为10mm/s
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取预设点速度
+函数原形：
+使用示例：
+int status
+ =
+ 
+readPointSpeedOfEls
+(
+0, 
+9
+, 1
+)
+；/
+/ 
+读取从站地址为9的设备的预设点1的速度
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置预设点力矩
+函数原形：
+使用示例：
+int status
+ =
+ 
+setPointTorqueOfEls
+(
+0, 
+9, 
+3, 50
+)
+；/
+/ 
+设置从站地址为9的设备的预设3的力矩为50N
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取预设点力矩
+函数原形：
+使用示例：
+int status
+ =
+ 
+readPointTorqueOfEls
+(
+0, 
+9
+, 3
+)
+；/
+/ 
+读取从站地址为9的设备的预设点3的力矩
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置原点偏移
+函数原形：
+使用示例：
+int status
+ =
+ 
+setRelativeMotionDistanceOfEls
+(
+0, 
+9, 
+1000
+)
+；/
+/ 
+设置从站地址为9的设备的相对运动距离为10mm
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取相对运动距离
+函数原形：
+使用示例：
+int status
+ =
+ 
+readRelativeMotionDistanceOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的相对运动距离
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置点动步进值
+函数原形：
+使用示例：
+int status
+ =
+ 
+setJogStepValueOfEls
+(
+0, 
+9, 
+100
+)
+；/
+/ 
+设置从站地址为9的设备的点动步进值为1mm
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取点动步进值
+函数原形：
+使用示例：
+int status
+ =
+ 
+readJogStepValueOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的点动步进值
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置减速段位置百分比
+函数原形：
+使用示例：
+int status
+ =
+ 
+setDecelerationPercentageOfPositionOfEls
+(
+0, 
+9, 
+50
+)
+；/
+/ 
+设置从站地址为9的设备的减速段位置百分比为50
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取减速段位置百分比
+函数原形：
+使用示例：
+int status
+ =
+ 
+readDecelerationPercentageOfPositionOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的减速段位置百分比
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置减速段速度百分比
+函数原形：
+使用示例：
+int status
+ =
+ 
+setDecelerationPercentageOfSpeedOfEls
+(
+0, 
+9, 
+20
+)
+；/
+/ 
+设置从站地址为9的设备的减速段速度百分比为20
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+读取减速段速度百分比
+函数原形：
+使用示例：
+int status
+ =
+ 
+readDecelerationPercentageOfSpeedOfEls
+(9)
+；/
+/ 
+读取从站地址为9的设备的减速段速度百分比
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置减速段作用方向
+函数原形：
+使用示例：
+int status
+ =
+ 
+setDecelerationDirectionOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+设置从站地址为9的设备的减速段作用方向为推方向
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取减速段作用方向
+函数原形：
+使用示例：
+int status
+ =
+ 
+readDecelerationDirectionOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的减速段作用方向
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+设置IO强制输出
+函数原形：
+使用示例：
+int status
+ =
+ 
+setIoForcedOutputOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+设置从站地址为9的设备的IO强制输出数据为1
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取IO强制输出
+函数原形：
+使用示例：
+int status
+ =
+ 
+readIoForcedOutputOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的IO强制输出数据
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+抱闸强制打开
+函数原形：
+使用示例：
+int status
+ =
+ 
+forcedControlBrakeOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+设置从站地址为9的设备的抱闸强制打开
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+修改设备从站地址
+函数原形：
+使用示例：
+int status
+ =
+ 
+changeSlaveIdOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+将从站地址为9的设备的从站地址改为1
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+修改设备波特率
+函数原形：
+使用示例：
+int status
+ =
+ 
+changeBaudRateOfEls
+(
+0, 
+9, 
+1
+)
+；/
+/ 
+设置从站地址为9的设备的波特率为19200
+若
+status
+等于1则操作正常，s
+tatus
+等于-
+1
+则操作失败
+获取设备运行状态
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceRunStateOfEls
+(
+0, 
+9)
+；/
+/ 
+获取从站地址为9的设备的运行状态
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取设备动作状态
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeviceActionStateOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的动作状态
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取设备当前位置
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeciveCurrentLocationOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的当前位置
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取设备当前速度
+函数原形：
+使用示例：
+int status
+ =
+ 
+getDeciveCurrentSpeedOfEls
+(
+0, 
+9)
+；/
+/ 
+读取从站地址为9的设备的当前速度
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取设备当前力矩
+函数原形：
+使用示例：
+int status 
+=
+ 
+getDeviceCurrentTorqueOfEls
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备的当前力矩
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取设备故障状态
+函数原形：
+使用示例：
+int status
+=
+ 
+getDeviceErrorStateOfEls
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备的故障状态
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取电机故障状态
+函数原形：
+使用示例：
+int status 
+=
+ 
+getMotorErrorStateOfEls
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备的电机故障
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取IO输入监测
+函数原形：
+使用示例：
+int status 
+=
+ 
+getIoInputMonitoringOfEls
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备的IO输入监测
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+获取IO输出监测
+函数原形：
+使用示例：
+ 
+int status 
+=
+ 
+getIoOutputMonitoringOfEls
+(
+0, 
+9)
+；/
+/ 
+获取站点为9号的
+设备的IO输出监测
+若
+s
+tatus
+等于-
+1
+则
+读取
+失败
+，
+否则返回值为int型数据
+ 
