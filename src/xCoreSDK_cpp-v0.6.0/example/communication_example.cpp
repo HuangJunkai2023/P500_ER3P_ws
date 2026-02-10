@@ -16,7 +16,7 @@
 using namespace rokae;
 
 namespace {
- xMateRobot g_robot; ///< 机器人对象
+ xMateErProRobot g_robot; ///< 机器人对象
 }
 
 /**
@@ -90,10 +90,12 @@ void example_io_register(BaseRobot *robot) {
  */
 int main() {
   std::string remote_ip = "192.168.0.160";
-  std::string local_ip = "192.168.0.100";
+  std::string local_ip = "192.168.0.200";
   try {
     // 本示例用到了实时状态数据，所以需要设置本机地址
     g_robot.connectToRobot(remote_ip, local_ip);
+
+    example_ReadKeyPadValue();
   }
   catch (const std::exception& e) {
     std::cout << "Connection error: " << e.what();
