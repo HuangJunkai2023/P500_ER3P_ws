@@ -28,6 +28,7 @@ if(XCORE_USE_XMATE_MODEL)
         torque_control
         follow_joint_position
         follow_cart_position
+        phone_teleop_follow_cart
         )
     foreach(example ${EXAMPLES_USE_XMATEMODEL})
         add_executable(${example} ${example}.cpp ${EXAMPLE_HEADERS})

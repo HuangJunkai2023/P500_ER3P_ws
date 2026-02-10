@@ -23,6 +23,7 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile
+!src/xCoreSDK_cpp-v0.6.0/Makefile
 
 # IDE
 .vscode/
