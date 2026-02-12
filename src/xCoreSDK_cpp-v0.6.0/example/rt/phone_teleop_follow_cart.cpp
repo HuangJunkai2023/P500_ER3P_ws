@@ -45,6 +45,7 @@ namespace {
 std::atomic_bool running = true;
 std::atomic_bool teleop_enabled = false;
 std::atomic_bool phone_pose_ready = false;
+std::atomic_bool reset_env_requested = false;
 std::atomic<int64_t> last_phone_packet_ms{0};
 
 std::mutex phone_mtx;
@@ -69,6 +70,7 @@ struct Packet {
   double qx{0}, qy{0}, qz{0}, qw{1};
   int enabled{0};
   int mode{0};  // 1=arm
+  int reset_env{0};
 };
 
 bool parsePacket(const std::string &line, Packet &p) {
@@ -88,6 +90,7 @@ bool parsePacket(const std::string &line, Packet &p) {
     p.qw = std::stod(fields[6]);
     p.enabled = std::stoi(fields[7]);
     p.mode = std::stoi(fields[8]);
+    p.reset_env = fields.size() >= 10 ? std::stoi(fields[9]) : 0;
   } catch (...) {
     return false;
   }
@@ -180,6 +183,13 @@ void udpReceiverLoop(int port) {
     Packet pkt;
     if (!parsePacket(line, pkt)) continue;
 
+    if (pkt.reset_env == 1) {
+      teleop_enabled = false;
+      reset_env_requested = true;
+      std::cout << "Received reset_env request from phone" << std::endl;
+      continue;
+    }
+
     if (!(pkt.enabled == 1 && pkt.mode == 1)) {
       teleop_enabled = false;
       continue;
@@ -228,17 +238,23 @@ void updatePose(rokae::FollowPosition<7> &fp,
   while (running) {
     next_tick += std::chrono::milliseconds(10);  // 100 Hz
 
+    if (reset_env_requested.exchange(false)) {
+      target = start_pose;
+      prev_inited = false;
+      was_active = false;
+      fp.update(target);
+      std::cout << "Received reset_env, returning to initial pose" << std::endl;
+    }
+
     const int64_t now_ms = steadyNowMs();
     const int64_t last_ms = last_phone_packet_ms.load(std::memory_order_relaxed);
     const bool link_alive = (last_ms > 0) && (now_ms - last_ms <= kPacketTimeoutMs);
     const bool active = teleop_enabled && phone_pose_ready && link_alive;
 
     if (!active) {
-      if (was_active) {
-        // Release/timeout: hold current target immediately.
-        fp.update(target);
-        std::cout << "Teleop inactive, hold target pose" << std::endl;
-      }
+      // Keep publishing current target while inactive so reset target converges.
+      fp.update(target);
+      if (was_active) std::cout << "Teleop inactive, hold target pose" << std::endl;
       prev_inited = false;
       was_active = false;
       std::this_thread::sleep_until(next_tick);
@@ -451,10 +467,44 @@ int main() {
     return 0;
   }
 
+  // Clear stale servo alarms / emergency-stop state before enabling motion.
+  robot.clearServoAlarm(ec);
+  if (ec) {
+    print(std::cerr, "clearServoAlarm failed:", ec);
+  }
+  ec.clear();
+  robot.recoverState(1, ec);
+  if (ec) {
+    print(std::cerr, "recoverState(1) failed:", ec);
+  }
+  ec.clear();
+
   robot.setRtNetworkTolerance(60, ec);
+  if (ec) {
+    print(std::cerr, "setRtNetworkTolerance failed:", ec);
+    return 0;
+  }
+  ec.clear();
+
   robot.setMotionControlMode(rokae::MotionControlMode::RtCommand, ec);
+  if (ec) {
+    print(std::cerr, "setMotionControlMode(RtCommand) failed:", ec);
+    return 0;
+  }
+  ec.clear();
+
   robot.setOperateMode(rokae::OperateMode::automatic, ec);
+  if (ec) {
+    print(std::cerr, "setOperateMode(automatic) failed:", ec);
+    return 0;
+  }
+  ec.clear();
+
   robot.setPowerState(true, ec);
+  if (ec) {
+    print(std::cerr, "setPowerState(true) failed:", ec);
+    return 0;
+  }
 
   try {
     robot.startReceiveRobotState(std::chrono::milliseconds(1), {rokae::RtSupportedFields::jointPos_m});

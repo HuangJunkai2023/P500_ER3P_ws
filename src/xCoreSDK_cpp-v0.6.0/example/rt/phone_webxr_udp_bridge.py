@@ -54,6 +54,9 @@ class BridgeServer:
             if ts is not None:
                 emit("echo", ts)
 
+            state_update = data.get("state_update", "")
+            reset_env = 1 if state_update == "reset_env" else 0
+
             # enabled = 1 only while touch teleop is active
             mode = 1 if data.get("teleop_mode") == "arm" else 0
             enabled = 1 if "teleop_mode" in data and mode == 1 else 0
@@ -61,6 +64,8 @@ class BridgeServer:
                 self.last_mode = "arm(enabled)"
             elif data.get("teleop_mode") == "base":
                 self.last_mode = "base"
+            elif reset_env == 1:
+                self.last_mode = "reset_env"
             else:
                 self.last_mode = "none"
 
@@ -75,7 +80,7 @@ class BridgeServer:
             qz = float(ori.get("z", 0.0))
             qw = float(ori.get("w", 1.0))
 
-            pkt = f"{px},{py},{pz},{qx},{qy},{qz},{qw},{enabled},{mode}\n".encode("utf-8")
+            pkt = f"{px},{py},{pz},{qx},{qy},{qz},{qw},{enabled},{mode},{reset_env}\n".encode("utf-8")
             self.udp_sock.sendto(pkt, self.udp_addr)
             self.tx_count += 1
 

@@ -85,6 +85,8 @@
       // XR globals
       let xrButton = null;
       let xrRefSpace = null;
+      let xrSession = null;
+      let xrCanvas = null;
 
       // WebGL scene globals
       let gl = null;
@@ -123,8 +125,10 @@
       }
 
       function onSessionStarted(session) {
+        xrSession = session;
         session.addEventListener('end', onSessionEnded);
         const canvas = document.createElement('canvas');
+        xrCanvas = canvas;
         gl = canvas.getContext('webgl', {
           xrCompatible: true,
         });
@@ -189,15 +193,24 @@
       }
 
       function onEndSession(session) {
-        session.end();
-
         // Let the server know user is ready for env reset
         const data = { timestamp: Date.now(), state_update: 'reset_env' };
         socket.send(data);
+
+        session.end();
       }
 
       function onSessionEnded(event) {
         xrButton.setSession(null);
+        xrSession = null;
+        xrRefSpace = null;
+        touchId = undefined;
+        touchDeltaY = 0;
+        teleopMode = undefined;
+        if (xrCanvas && xrCanvas.parentNode) {
+          xrCanvas.parentNode.removeChild(xrCanvas);
+        }
+        xrCanvas = null;
         gl = null;
       }
 
@@ -238,6 +251,9 @@
       }
 
       function onXRFrame(t, frame) {
+        if (!gl || !xrRefSpace || !xrSession || frame.session !== xrSession) {
+          return;
+        }
         frame.session.requestAnimationFrame(onXRFrame);
 
         // Visualize status of touch control
