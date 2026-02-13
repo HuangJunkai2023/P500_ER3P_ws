@@ -46,6 +46,7 @@ std::atomic_bool running = true;
 std::atomic_bool teleop_enabled = false;
 std::atomic_bool phone_pose_ready = false;
 std::atomic_bool reset_env_requested = false;
+std::atomic_int arm_enabled_count{0};
 std::atomic<int64_t> last_phone_packet_ms{0};
 
 std::mutex phone_mtx;
@@ -55,11 +56,13 @@ Eigen::Quaterniond latest_phone_rot = Eigen::Quaterniond::Identity();
 constexpr double kMaxDelta = 0.15;  // m
 constexpr int kUdpPort = 5566;
 constexpr int64_t kPacketTimeoutMs = 120;
-constexpr double kPosDeadband = 0.0004;     // m
+// Suppress tiny hand jitter from phone sensing.
+constexpr double kPosDeadband = 0.0015;     // m
 constexpr double kPosStepLimit = 0.020;     // m per control tick
-constexpr double kRotDeadband = 0.0020;     // rad
+constexpr double kRotDeadband = 0.0080;     // rad
 constexpr double kRotStepLimit = 0.20;      // rad per control tick
 constexpr bool kInvertPhoneLocalRoll = true; // Fix left/right tilt direction
+constexpr bool kInvertPhoneLocalYaw = true;  // Reverse vertical-axis turning direction
 
 xMateErProRobot robot;
 
@@ -185,6 +188,7 @@ void udpReceiverLoop(int port) {
 
     if (pkt.reset_env == 1) {
       teleop_enabled = false;
+      arm_enabled_count = 0;
       reset_env_requested = true;
       std::cout << "Received reset_env request from phone" << std::endl;
       continue;
@@ -192,8 +196,12 @@ void udpReceiverLoop(int port) {
 
     if (!(pkt.enabled == 1 && pkt.mode == 1)) {
       teleop_enabled = false;
+      arm_enabled_count = 0;
       continue;
     }
+
+    const int enabled_cnt = ++arm_enabled_count;
+    if (enabled_cnt <= 2) continue;  // Skip first few frames to avoid touch/pose timing mismatch.
 
     Eigen::Vector3d p;
     Eigen::Quaterniond q;
@@ -299,6 +307,7 @@ void updatePose(rokae::FollowPosition<7> &fp,
 
     // Empirical correction: reverse left/right phone tilt.
     if (kInvertPhoneLocalRoll) rotvec.x() = -rotvec.x();
+    if (kInvertPhoneLocalYaw) rotvec.z() = -rotvec.z();
 
     double ang = rotvec.norm();
     if (ang < kRotDeadband) {
