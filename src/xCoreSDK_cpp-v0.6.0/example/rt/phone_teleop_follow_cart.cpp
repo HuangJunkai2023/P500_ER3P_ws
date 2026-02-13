@@ -63,6 +63,8 @@ constexpr double kRotDeadband = 0.0080;     // rad
 constexpr double kRotStepLimit = 0.20;      // rad per control tick
 constexpr bool kInvertPhoneLocalRoll = true; // Fix left/right tilt direction
 constexpr bool kInvertPhoneLocalYaw = true;  // Reverse vertical-axis turning direction
+constexpr bool kUseToolTcpOffsetComp = true;
+const Eigen::Vector3d kToolTcpOffsetInFlange(0.0, 0.0, 0.15);  // 15 cm in flange local frame
 
 xMateErProRobot robot;
 
@@ -232,7 +234,21 @@ void updatePose(rokae::FollowPosition<7> &fp,
   // Faster following gain than default sample.
   fp.setScale(1.0);
 
-  Eigen::Transform<double, 3, Eigen::Isometry> target = start_pose;
+  auto flangeToTcp = [](const Eigen::Transform<double, 3, Eigen::Isometry> &flange_pose) {
+    if (!kUseToolTcpOffsetComp) return flange_pose;
+    Eigen::Transform<double, 3, Eigen::Isometry> tcp_pose = flange_pose;
+    tcp_pose.translation() = flange_pose.translation() + flange_pose.linear() * kToolTcpOffsetInFlange;
+    return tcp_pose;
+  };
+  auto tcpToFlange = [](const Eigen::Transform<double, 3, Eigen::Isometry> &tcp_pose) {
+    if (!kUseToolTcpOffsetComp) return tcp_pose;
+    Eigen::Transform<double, 3, Eigen::Isometry> flange_pose = tcp_pose;
+    flange_pose.translation() = tcp_pose.translation() - tcp_pose.linear() * kToolTcpOffsetInFlange;
+    return flange_pose;
+  };
+
+  // Track TCP target internally, then convert back to flange target for controller.
+  Eigen::Transform<double, 3, Eigen::Isometry> target = flangeToTcp(start_pose);
 
   bool prev_inited = false;
   bool was_active = false;
@@ -247,10 +263,10 @@ void updatePose(rokae::FollowPosition<7> &fp,
     next_tick += std::chrono::milliseconds(10);  // 100 Hz
 
     if (reset_env_requested.exchange(false)) {
-      target = start_pose;
+      target = flangeToTcp(start_pose);
       prev_inited = false;
       was_active = false;
-      fp.update(target);
+      fp.update(tcpToFlange(target));
       std::cout << "Received reset_env, returning to initial pose" << std::endl;
     }
 
@@ -261,7 +277,7 @@ void updatePose(rokae::FollowPosition<7> &fp,
 
     if (!active) {
       // Keep publishing current target while inactive so reset target converges.
-      fp.update(target);
+      fp.update(tcpToFlange(target));
       if (was_active) std::cout << "Teleop inactive, hold target pose" << std::endl;
       prev_inited = false;
       was_active = false;
@@ -329,7 +345,7 @@ void updatePose(rokae::FollowPosition<7> &fp,
     target.linear() = new_rot.toRotationMatrix();
     target.translation() = new_pos;
 
-    fp.update(target);
+    fp.update(tcpToFlange(target));
     if (clock::now() >= next_log) {
       const Eigen::Quaterniond qlog(target.rotation());
       std::cout << std::fixed << std::setprecision(4)
