@@ -1,0 +1,10 @@
+开启夹爪电源，按下左下角橙色开关，初始化完成点击开关旁边红色输出按键变绿即打开输出电源，夹爪蓝灯闪烁
+
+启动机械臂控制
+./scu_robotics/P500_ER3P_ws/src/xCoreSDK_cpp-v0.6.0/build/bin/phone_teleop_follow_cart 
+
+启动网页服务器与夹爪
+conda activate xmate
+python scu_robotics/P500_ER3P_ws/src/xCoreSDK_cpp-v0.6.0/example/rt/phone_webxr_udp_bridge.py 
+
+点击Start episode开始示教，按住屏幕激活机械臂（停止控制要再点一下屏幕），按住上下滑动控制夹爪，end episode之后reset env重置机械臂与夹爪位置

@@ -13,6 +13,7 @@ import os
 import socket
 import time
 from pathlib import Path
+from engineio.payload import Payload
 
 DEFAULT_GRIPPER_PORT = "/dev/ttyUSB0"
 DEFAULT_GRIPPER_ID = 9
@@ -23,6 +24,10 @@ DEFAULT_GRIPPER_STARTUP_LOC = 0
 DEFAULT_GRIPPER_RESET_OPEN_LOC = 0
 DEFAULT_GRIPPER_STARTUP_WAIT_S = 1.5
 DEFAULT_GRIPPER_STARTUP_RETRY = 2
+DEFAULT_GRIPPER_DELTA_GAIN = 1.5  # >1.0 means higher sensitivity (less finger travel)
+
+# Safari may batch many polling packets when network jitters; raise decode cap.
+Payload.max_decode_packets = 256
 
 
 class BridgeServer:
@@ -58,7 +63,14 @@ class BridgeServer:
         tpl = os.path.join(web_root, "templates")
         sta = os.path.join(web_root, "static")
         self.app = Flask(__name__, template_folder=tpl, static_folder=sta)
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+        self.socketio = SocketIO(
+            self.app,
+            cors_allowed_origins="*",
+            async_mode="threading",
+            allow_upgrades=False,
+            logger=False,
+            engineio_logger=False,
+        )
         self.web_port = web_port
 
         @self.app.route("/")
@@ -283,7 +295,7 @@ class EpgGripperController:
         if gripper_delta is None:
             return
 
-        d = float(max(-1.0, min(1.0, gripper_delta)))
+        d = float(max(-1.0, min(1.0, gripper_delta * DEFAULT_GRIPPER_DELTA_GAIN)))
         self.target_norm = max(0.0, min(1.0, self.ref_norm + d))
 
         now = time.time()

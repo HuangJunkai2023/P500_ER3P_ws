@@ -71,7 +71,10 @@
       const rttStats = new RTTStats(100);
 
       // Socket to communicate with server
-      const socket = io();
+      const socket = io({
+        transports: ['polling'],
+        upgrade: false,
+      });
 
       // Calculate RTT from server response
       socket.on('echo', (timestamp) => {
@@ -93,6 +96,8 @@
 
       // Touch event handling globals
       let touchId, touchStartY, touchDeltaY, teleopMode;
+      let lastPoseSendTs = 0;
+      const kPoseSendIntervalMs = 33; // ~30 Hz to avoid packet bursts
 
       function initXR() {
         xrButton = new WebXRButton({
@@ -183,7 +188,11 @@
 
         // Let the server know user has started the episode
         const data = { timestamp: Date.now(), state_update: 'episode_started' };
-        socket.send(data);
+        const now = Date.now();
+        if (now - lastPoseSendTs >= kPoseSendIntervalMs) {
+          socket.send(data);
+          lastPoseSendTs = now;
+        }
       }
 
       function onPrepareEndSession() {
