@@ -38,3 +38,6 @@ Makefile
 *.tmp
 *.bak
 *.backup
+
+# Data collection outputs
+src/data_collect/dataset/
