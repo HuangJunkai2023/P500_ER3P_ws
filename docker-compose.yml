@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   ros1:
-    build: .
+    image: ros:noetic
     container_name: p500_ros1
     network_mode: host
     privileged: true
