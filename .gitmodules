@@ -2,3 +2,6 @@
 [submodule "src/tidybot2"]
 	path = src/tidybot2
 	url = https://github.com/HuangJunkai2023/tidybot2.git
+[submodule "src/diffusion_policy"]
+	path = src/diffusion_policy
+	url = https://github.com/real-stanford/diffusion_policy.git
