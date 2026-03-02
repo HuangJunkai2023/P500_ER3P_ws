@@ -44,3 +44,4 @@ Makefile
 
 # Data collection outputs
 src/data_collect/dataset/
+data/
