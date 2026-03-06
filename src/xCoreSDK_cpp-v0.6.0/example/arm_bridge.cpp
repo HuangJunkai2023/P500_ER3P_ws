@@ -1,7 +1,6 @@
 #include <array>
 #include <atomic>
 #include <chrono>
-#include <cmath>
 #include <iostream>
 #include <mutex>
 #include <sstream>
@@ -25,11 +24,25 @@ struct Config {
   unsigned int gripper_di2_port = 1;
   double filter_freq = 20.0;
   double rt_network_tolerance = 40.0;
-  double max_lin_speed = 0.12;
-  double max_ang_speed = 0.8;
-  double pos_deadband = 0.0015;
-  double rot_deadband = 0.02;
+  double target_alpha_pos = 0.08;
+  double target_alpha_rot = 0.06;
+  double max_pos_speed = 0.18;
+  double max_rot_speed = 0.90;
 };
+
+constexpr double kDt = 0.001;
+
+double wrap_angle(double angle) {
+  while (angle > M_PI) angle -= 2.0 * M_PI;
+  while (angle < -M_PI) angle += 2.0 * M_PI;
+  return angle;
+}
+
+double clamp(double x, double lo, double hi) {
+  if (x < lo) return lo;
+  if (x > hi) return hi;
+  return x;
+}
 
 void print_err(const std::string &msg) {
   std::cout << "ERR " << msg << std::endl;
@@ -47,12 +60,6 @@ void warn_ec(const error_code &ec, const std::string &ctx) {
   if (ec) {
     std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
   }
-}
-
-double wrap_angle(double angle) {
-  while (angle > M_PI) angle -= 2.0 * M_PI;
-  while (angle < -M_PI) angle += 2.0 * M_PI;
-  return angle;
 }
 
 void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
@@ -91,10 +98,10 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--gripper-di2-port") cfg.gripper_di2_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
     else if (arg == "--rt-network-tolerance") cfg.rt_network_tolerance = std::stod(need_val(arg));
-    else if (arg == "--max-lin-speed") cfg.max_lin_speed = std::stod(need_val(arg));
-    else if (arg == "--max-ang-speed") cfg.max_ang_speed = std::stod(need_val(arg));
-    else if (arg == "--pos-deadband") cfg.pos_deadband = std::stod(need_val(arg));
-    else if (arg == "--rot-deadband") cfg.rot_deadband = std::stod(need_val(arg));
+    else if (arg == "--target-alpha-pos") cfg.target_alpha_pos = std::stod(need_val(arg));
+    else if (arg == "--target-alpha-rot") cfg.target_alpha_rot = std::stod(need_val(arg));
+    else if (arg == "--max-pos-speed") cfg.max_pos_speed = std::stod(need_val(arg));
+    else if (arg == "--max-rot-speed") cfg.max_rot_speed = std::stod(need_val(arg));
     else if (arg == "--speed" || arg == "--zone") { (void)need_val(arg); }
     else return false;
   }
@@ -138,7 +145,7 @@ int main(int argc, char **argv) {
 
   std::array<double, 16> target_pose_m{};
   std::array<double, 6> target_posture{};
-  std::array<double, 6> cmd_posture{};
+  std::array<double, 6> smooth_posture{};
   std::array<double, 6> current_posture{};
   std::mutex pose_mutex;
   std::atomic<bool> finish_requested(false);
@@ -152,7 +159,7 @@ int main(int argc, char **argv) {
     robot.getStateData(RtSupportedFields::tcpPose_m, target_pose_m);
     Utils::transArrayToPosture(target_pose_m, current_posture);
     target_posture = current_posture;
-    cmd_posture = current_posture;
+    smooth_posture = current_posture;
   } catch (const std::exception &e) {
     print_err(std::string("startReceiveRobotState:") + e.what());
     return 1;
@@ -176,11 +183,11 @@ int main(int argc, char **argv) {
 
   std::function<CartesianPosition()> callback = [&]() {
     std::array<double, 6> local_target_posture{};
-    std::array<double, 6> local_cmd_posture{};
+    std::array<double, 6> local_smooth_posture{};
     {
       std::lock_guard<std::mutex> lock(pose_mutex);
       local_target_posture = target_posture;
-      local_cmd_posture = cmd_posture;
+      local_smooth_posture = smooth_posture;
     }
 
     std::array<double, 16> measured{};
@@ -193,37 +200,28 @@ int main(int argc, char **argv) {
     } catch (...) {
     }
 
-    const double dt = 0.001;
-    const double pos_step_max = cfg.max_lin_speed * dt;
-    const double rot_step_max = cfg.max_ang_speed * dt;
+    const double max_pos_step = cfg.max_pos_speed * kDt;
+    const double max_rot_step = cfg.max_rot_speed * kDt;
 
-    for (int i = 0; i < 3; ++i) {
-      double diff = local_target_posture[i] - local_cmd_posture[i];
-      if (std::abs(diff) < cfg.pos_deadband) {
-        diff = 0.0;
-      }
-      if (diff > pos_step_max) diff = pos_step_max;
-      if (diff < -pos_step_max) diff = -pos_step_max;
-      local_cmd_posture[i] += diff;
+    for (size_t i = 0; i < 3; ++i) {
+      double err = local_target_posture[i] - local_smooth_posture[i];
+      double delta = cfg.target_alpha_pos * err;
+      delta = clamp(delta, -max_pos_step, max_pos_step);
+      local_smooth_posture[i] += delta;
     }
 
-    for (int i = 3; i < 6; ++i) {
-      double diff = wrap_angle(local_target_posture[i] - local_cmd_posture[i]);
-      if (std::abs(diff) < cfg.rot_deadband) {
-        diff = 0.0;
-      }
-      if (diff > rot_step_max) diff = rot_step_max;
-      if (diff < -rot_step_max) diff = -rot_step_max;
-      local_cmd_posture[i] = wrap_angle(local_cmd_posture[i] + diff);
+    for (size_t i = 3; i < 6; ++i) {
+      double err = wrap_angle(local_target_posture[i] - local_smooth_posture[i]);
+      double delta = cfg.target_alpha_rot * err;
+      delta = clamp(delta, -max_rot_step, max_rot_step);
+      local_smooth_posture[i] = wrap_angle(local_smooth_posture[i] + delta);
     }
 
     std::array<double, 16> local_target{};
-    Utils::postureToTransArray(local_cmd_posture, local_target);
-
+    Utils::postureToTransArray(local_smooth_posture, local_target);
     {
       std::lock_guard<std::mutex> lock(pose_mutex);
-      cmd_posture = local_cmd_posture;
-      target_pose_m = local_target;
+      smooth_posture = local_smooth_posture;
     }
 
     CartesianPosition cmd;
@@ -280,7 +278,7 @@ int main(int argc, char **argv) {
         target_pose_m = measured;
         Utils::transArrayToPosture(measured, current_posture);
         target_posture = current_posture;
-        cmd_posture = current_posture;
+        smooth_posture = current_posture;
       } catch (...) {
       }
       gripper_pos = 1.0;
