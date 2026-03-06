@@ -13,6 +13,7 @@ add_compile_definitions(
 set(EXAMPLES
     sdk_example
     move_example
+    arm_bridge
     path_record
     rl_project
     read_robot_state
