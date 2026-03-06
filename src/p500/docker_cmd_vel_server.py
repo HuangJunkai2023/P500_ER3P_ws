@@ -15,16 +15,22 @@ from geometry_msgs.msg import Twist
 
 
 def parse_payload(data):
+    """
+    支持两种帧格式（UTF-8 文本）：
+      2 值: "<linear_x> <angular_z>"          （旧格式，向后兼容）
+      3 值: "<linear_x> <linear_y> <angular_z>" （Jetson 全向控制）
+    返回 (linear_x, linear_y, angular_z) 或 None。
+    """
     try:
         text = data.decode("utf-8").strip()
         if not text:
             return None
         parts = text.split()
-        if len(parts) != 2:
-            return None
-        linear_x = float(parts[0])
-        angular_z = float(parts[1])
-        return linear_x, angular_z
+        if len(parts) == 2:
+            return float(parts[0]), 0.0, float(parts[1])
+        if len(parts) == 3:
+            return float(parts[0]), float(parts[1]), float(parts[2])
+        return None
     except Exception:
         return None
 
@@ -117,15 +123,17 @@ def main():
             cmd = parse_payload(data)
             if cmd is None:
                 continue
-            linear_x, angular_z = cmd
+            linear_x, linear_y, angular_z = cmd
             if log_enabled:
                 ts = time.strftime("%Y-%m-%d %H:%M:%S")
                 print(
-                    f"[{ts}] [UDP] {addr[0]}:{addr[1]} -> linear_x={linear_x:.3f}, angular_z={angular_z:.3f}",
+                    f"[{ts}] [UDP] {addr[0]}:{addr[1]} ->"
+                    f" vx={linear_x:.3f} vy={linear_y:.3f} wz={angular_z:.3f}",
                     flush=True,
                 )
             twist = Twist()
             twist.linear.x = linear_x
+            twist.linear.y = linear_y
             twist.angular.z = angular_z
             last_twist = twist
             last_cmd_time = time.time()
