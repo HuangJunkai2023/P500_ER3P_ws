@@ -17,6 +17,7 @@ struct Config {
   std::string local_ip = "";
   double speed = 300.0;
   double zone = 10.0;
+  bool enable_gripper = true;
   double gripper_threshold = 0.5;
   unsigned int gripper_board = 2;
   unsigned int gripper_di1_port = 0;
@@ -36,12 +37,22 @@ bool check_ec(const error_code &ec, const std::string &ctx) {
 }
 
 void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
+  if (!cfg.enable_gripper) {
+    return;
+  }
+
   error_code ec;
   const bool open_like = value >= cfg.gripper_threshold;
   robot.setDO(cfg.gripper_board, cfg.gripper_di1_port, true, ec);
-  if (!check_ec(ec, "setDO_di1")) return;
+  if (ec) {
+    std::cerr << "WARN setDO_di1:" << ec.message() << std::endl;
+    return;
+  }
   robot.setDO(cfg.gripper_board, cfg.gripper_di2_port, !open_like, ec);
-  if (!check_ec(ec, "setDO_di2")) return;
+  if (ec) {
+    std::cerr << "WARN setDO_di2:" << ec.message() << std::endl;
+    return;
+  }
 }
 
 bool parse_args(int argc, char **argv, Config &cfg) {
@@ -56,6 +67,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--local-ip") cfg.local_ip = need_val(arg);
     else if (arg == "--speed") cfg.speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.zone = std::stod(need_val(arg));
+    else if (arg == "--disable-gripper") cfg.enable_gripper = false;
     else if (arg == "--gripper-threshold") cfg.gripper_threshold = std::stod(need_val(arg));
     else if (arg == "--gripper-board") cfg.gripper_board = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--gripper-di1-port") cfg.gripper_di1_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
