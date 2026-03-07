@@ -39,6 +39,8 @@ foreach(example ${EXAMPLES})
     target_link_libraries(${example} Rokae::Rokae Threads::Threads eigen)
 endforeach()
 
+target_compile_definitions(arm_bridge PUBLIC XMATEMODEL_LIB_SUPPORTED)
+
 # link Upgrade library to controller upgrade example
 target_link_libraries(controller_upgrade Rokae::Upgrade)
 target_include_directories(controller_upgrade PUBLIC

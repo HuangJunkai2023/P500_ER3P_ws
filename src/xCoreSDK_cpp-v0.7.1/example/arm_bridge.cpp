@@ -2,12 +2,12 @@
 #include <atomic>
 #include <chrono>
 #include <iostream>
-#include <cmath>
-#include <algorithm>
 #include <mutex>
 #include <sstream>
 #include <string>
-#include <thread>
+
+#include "Eigen/Core"
+#include "Eigen/Geometry"
 
 #include "rokae/robot.h"
 #include "rokae/utility.h"
@@ -24,26 +24,10 @@ struct Config {
   unsigned int gripper_board = 2;
   unsigned int gripper_di1_port = 0;
   unsigned int gripper_di2_port = 1;
-  double max_pos_speed = 0.18;
-  double max_rot_speed = 0.90;
-  double max_pos_accel = 0.90;
-  double max_rot_accel = 4.50;
+  double follow_scale = 0.35;
   double cmd_timeout = 0.25;
+  double filter_freq = 15.0;
 };
-
-constexpr double kDt = 0.001;
-
-double wrap_angle(double angle) {
-  while (angle > M_PI) angle -= 2.0 * M_PI;
-  while (angle < -M_PI) angle += 2.0 * M_PI;
-  return angle;
-}
-
-double clamp(double x, double lo, double hi) {
-  if (x < lo) return lo;
-  if (x > hi) return hi;
-  return x;
-}
 
 void print_err(const std::string &msg) {
   std::cout << "ERR " << msg << std::endl;
@@ -78,7 +62,6 @@ void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
   robot.setDO(cfg.gripper_board, cfg.gripper_di2_port, !open_like, ec);
   if (ec) {
     std::cerr << "WARN setDO_di2:" << ec.message() << std::endl;
-    return;
   }
 }
 
@@ -97,15 +80,42 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--gripper-board") cfg.gripper_board = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--gripper-di1-port") cfg.gripper_di1_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--gripper-di2-port") cfg.gripper_di2_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
-    else if (arg == "--max-pos-speed") cfg.max_pos_speed = std::stod(need_val(arg));
-    else if (arg == "--max-rot-speed") cfg.max_rot_speed = std::stod(need_val(arg));
-    else if (arg == "--max-pos-accel") cfg.max_pos_accel = std::stod(need_val(arg));
-    else if (arg == "--max-rot-accel") cfg.max_rot_accel = std::stod(need_val(arg));
+    else if (arg == "--follow-scale") cfg.follow_scale = std::stod(need_val(arg));
     else if (arg == "--cmd-timeout") cfg.cmd_timeout = std::stod(need_val(arg));
-    else if (arg == "--speed" || arg == "--zone") { (void)need_val(arg); }
+    else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
+    else if (arg == "--max-pos-speed" || arg == "--max-rot-speed" ||
+             arg == "--max-pos-accel" || arg == "--max-rot-accel" ||
+             arg == "--speed" || arg == "--zone") {
+      (void)need_val(arg);
+    }
     else return false;
   }
   return true;
+}
+
+Eigen::Transform<double, 3, Eigen::Isometry> posture_to_transform(const std::array<double, 6> &posture) {
+  std::array<double, 16> tf_array{};
+  Utils::postureToTransArray(posture, tf_array);
+  Eigen::Matrix4d mat = Eigen::Matrix4d::Identity();
+  for (int r = 0; r < 4; ++r) {
+    for (int c = 0; c < 4; ++c) {
+      mat(r, c) = tf_array[4 * r + c];
+    }
+  }
+  Eigen::Transform<double, 3, Eigen::Isometry> tf;
+  tf.matrix() = mat;
+  return tf;
+}
+
+bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture) {
+  try {
+    std::array<double, 16> measured{};
+    robot.getStateData(RtSupportedFields::tcpPose_m, measured);
+    Utils::transArrayToPosture(measured, posture);
+    return true;
+  } catch (...) {
+    return false;
+  }
 }
 
 } // namespace
@@ -143,27 +153,9 @@ int main(int argc, char **argv) {
   robot.clearServoAlarm(ec);
   warn_ec(ec, "clearServoAlarm");
 
-  std::array<double, 16> target_pose_m{};
-  std::array<double, 6> target_posture{};
-  std::array<double, 6> traj_pos{};
-  std::array<double, 6> traj_vel{};
-  std::array<double, 6> current_posture{};
-  std::mutex pose_mutex;
-  std::atomic<bool> finish_requested(false);
-  std::atomic<bool> loop_alive(false);
-  std::chrono::steady_clock::time_point last_exec_tp = std::chrono::steady_clock::now();
-  std::string loop_error;
-  std::mutex loop_error_mutex;
-
   try {
     robot.startReceiveRobotState(std::chrono::milliseconds(1), {RtSupportedFields::tcpPose_m});
     robot.updateRobotState(std::chrono::milliseconds(50));
-    robot.getStateData(RtSupportedFields::tcpPose_m, target_pose_m);
-    Utils::transArrayToPosture(target_pose_m, current_posture);
-    target_posture = current_posture;
-    traj_pos = current_posture;
-    traj_vel.fill(0.0);
-    last_exec_tp = std::chrono::steady_clock::now();
   } catch (const std::exception &e) {
     print_err(std::string("startReceiveRobotState:") + e.what());
     return 1;
@@ -181,108 +173,25 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  std::function<CartesianPosition()> callback = [&]() {
-    std::array<double, 6> local_target_posture{};
-    std::array<double, 6> local_traj_pos{};
-    std::array<double, 6> local_traj_vel{};
-    {
-      std::lock_guard<std::mutex> lock(pose_mutex);
-      local_target_posture = target_posture;
-      local_traj_pos = traj_pos;
-      local_traj_vel = traj_vel;
-    }
+  rtCon->setFilterLimit(false, cfg.filter_freq);
 
-    std::array<double, 16> measured{};
+  auto model = robot.model();
+  FollowPosition<7> follow_pose(robot, model);
+  follow_pose.setScale(cfg.follow_scale);
+
+  std::atomic<bool> follow_started(false);
+  std::array<double, 6> current_posture{};
+  std::mutex state_mutex;
+  std::chrono::steady_clock::time_point last_exec_tp = std::chrono::steady_clock::now();
+
+  if (read_current_posture(robot, current_posture)) {
     try {
-      robot.getStateData(RtSupportedFields::tcpPose_m, measured);
-      std::array<double, 6> measured_posture{};
-      Utils::transArrayToPosture(measured, measured_posture);
-      std::lock_guard<std::mutex> lock(pose_mutex);
-      current_posture = measured_posture;
-    } catch (...) {
-    }
-
-    const double max_pos_step = cfg.max_pos_speed * kDt;
-    const double max_rot_step = cfg.max_rot_speed * kDt;
-    const double max_pos_acc_step = cfg.max_pos_accel * kDt;
-    const double max_rot_acc_step = cfg.max_rot_accel * kDt;
-
-    const auto now_tp = std::chrono::steady_clock::now();
-    const double since_exec = std::chrono::duration<double>(now_tp - last_exec_tp).count();
-    if (since_exec > cfg.cmd_timeout) {
-      local_target_posture = local_traj_pos;
-    }
-
-    for (size_t i = 0; i < 3; ++i) {
-      double err = local_target_posture[i] - local_traj_pos[i];
-      double dir = (err >= 0.0) ? 1.0 : -1.0;
-      double v_stop = std::sqrt(2.0 * cfg.max_pos_accel * std::abs(err));
-      double vel_des = dir * std::min(cfg.max_pos_speed, v_stop);
-      double vel_delta = vel_des - local_traj_vel[i];
-      vel_delta = clamp(vel_delta, -max_pos_acc_step, max_pos_acc_step);
-      local_traj_vel[i] += vel_delta;
-      local_traj_vel[i] = clamp(local_traj_vel[i], -cfg.max_pos_speed, cfg.max_pos_speed);
-      double delta = local_traj_vel[i] * kDt;
-      delta = clamp(delta, -max_pos_step, max_pos_step);
-      if (std::abs(delta) > std::abs(err)) {
-        delta = err;
-        local_traj_vel[i] = 0.0;
-      }
-      local_traj_pos[i] += delta;
-    }
-
-    for (size_t i = 3; i < 6; ++i) {
-      double err = wrap_angle(local_target_posture[i] - local_traj_pos[i]);
-      double dir = (err >= 0.0) ? 1.0 : -1.0;
-      double v_stop = std::sqrt(2.0 * cfg.max_rot_accel * std::abs(err));
-      double vel_des = dir * std::min(cfg.max_rot_speed, v_stop);
-      double vel_delta = vel_des - local_traj_vel[i];
-      vel_delta = clamp(vel_delta, -max_rot_acc_step, max_rot_acc_step);
-      local_traj_vel[i] += vel_delta;
-      local_traj_vel[i] = clamp(local_traj_vel[i], -cfg.max_rot_speed, cfg.max_rot_speed);
-      double delta = local_traj_vel[i] * kDt;
-      delta = clamp(delta, -max_rot_step, max_rot_step);
-      if (std::abs(delta) > std::abs(err)) {
-        delta = err;
-        local_traj_vel[i] = 0.0;
-      }
-      local_traj_pos[i] = wrap_angle(local_traj_pos[i] + delta);
-    }
-
-    std::array<double, 16> local_target{};
-    Utils::postureToTransArray(local_traj_pos, local_target);
-    {
-      std::lock_guard<std::mutex> lock(pose_mutex);
-      traj_pos = local_traj_pos;
-      traj_vel = local_traj_vel;
-    }
-
-    CartesianPosition cmd;
-    cmd.pos = local_target;
-    if (finish_requested.load()) {
-      cmd.setFinished();
-    }
-    return cmd;
-  };
-
-  try {
-    rtCon->setControlLoop(callback, 0, true);
-    rtCon->startMove(RtControllerMode::cartesianPosition);
-  } catch (const std::exception &e) {
-    print_err(std::string("startMove:") + e.what());
-    return 1;
-  }
-
-  std::thread loop_thread([&]() {
-    loop_alive.store(true);
-    try {
-      rtCon->startLoop(true);
+      follow_pose.start(posture_to_transform(current_posture));
+      follow_started.store(true);
     } catch (const std::exception &e) {
-      std::lock_guard<std::mutex> lock(loop_error_mutex);
-      loop_error = e.what();
+      print_err(std::string("follow_start:") + e.what());
     }
-    loop_alive.store(false);
-  });
+  }
 
   std::cout << "READY" << std::endl;
 
@@ -291,12 +200,8 @@ int main(int argc, char **argv) {
   while (std::getline(std::cin, line)) {
     if (line.empty()) continue;
 
-    {
-      std::lock_guard<std::mutex> lock(loop_error_mutex);
-      if (!loop_error.empty()) {
-        print_err(std::string("rt_loop:") + loop_error);
-        loop_error.clear();
-      }
+    if (read_current_posture(robot, current_posture)) {
+      std::lock_guard<std::mutex> lock(state_mutex);
     }
 
     std::istringstream iss(line);
@@ -304,16 +209,18 @@ int main(int argc, char **argv) {
     iss >> cmd;
 
     if (cmd == "RESET") {
-      std::array<double, 16> measured{};
-      try {
-        robot.getStateData(RtSupportedFields::tcpPose_m, measured);
-        std::lock_guard<std::mutex> lock(pose_mutex);
-        target_pose_m = measured;
-        Utils::transArrayToPosture(measured, current_posture);
-        target_posture = current_posture;
-        traj_pos = current_posture;
-        traj_vel.fill(0.0);
-      } catch (...) {
+      if (read_current_posture(robot, current_posture)) {
+        try {
+          if (follow_started.load()) {
+            follow_pose.stop();
+            follow_started.store(false);
+          }
+          follow_pose.setScale(cfg.follow_scale);
+          follow_pose.start(posture_to_transform(current_posture));
+          follow_started.store(true);
+        } catch (const std::exception &e) {
+          print_err(std::string("follow_reset:") + e.what());
+        }
       }
       last_exec_tp = std::chrono::steady_clock::now();
       gripper_pos = 1.0;
@@ -329,16 +236,21 @@ int main(int argc, char **argv) {
         continue;
       }
 
-      std::array<double, 6> posture = {x, y, z, rx, ry, rz};
-      std::array<double, 16> target{};
-      Utils::postureToTransArray(posture, target);
-      {
-        std::lock_guard<std::mutex> lock(pose_mutex);
-        target_pose_m = target;
-        target_posture = posture;
+      std::array<double, 6> target_posture = {x, y, z, rx, ry, rz};
+      try {
+        if (!follow_started.load()) {
+          follow_pose.setScale(cfg.follow_scale);
+          follow_pose.start(posture_to_transform(target_posture));
+          follow_started.store(true);
+        } else {
+          follow_pose.update(posture_to_transform(target_posture));
+        }
+      } catch (const std::exception &e) {
+        print_err(std::string("follow_update:") + e.what());
+        continue;
       }
-      last_exec_tp = std::chrono::steady_clock::now();
 
+      last_exec_tp = std::chrono::steady_clock::now();
       gripper_pos = grip;
       set_gripper(robot, cfg, gripper_pos);
       std::cout << "OK" << std::endl;
@@ -347,8 +259,7 @@ int main(int argc, char **argv) {
 
     if (cmd == "STATE") {
       std::array<double, 6> posture{};
-      {
-        std::lock_guard<std::mutex> lock(pose_mutex);
+      if (!read_current_posture(robot, posture)) {
         posture = current_posture;
       }
       std::cout << "STATE "
@@ -359,16 +270,17 @@ int main(int argc, char **argv) {
     }
 
     if (cmd == "CLOSE") {
-      finish_requested.store(true);
+      if (follow_started.load()) {
+        try {
+          follow_pose.stop();
+        } catch (...) {
+        }
+      }
       std::cout << "OK" << std::endl;
       break;
     }
 
     print_err("unknown_cmd");
-  }
-
-  if (loop_thread.joinable()) {
-    loop_thread.join();
   }
 
   robot.stopReceiveRobotState();
