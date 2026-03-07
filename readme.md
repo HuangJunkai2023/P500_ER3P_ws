@@ -1,11 +1,73 @@
-sdk download： http://sw.rokae.com:8800/?dir=xcore/SDK/v3.1
+# P500 + ER3Pro 使用说明
 
+## 机械臂 SDK
+
+- 下载地址：http://sw.rokae.com:8800/?dir=xcore/SDK/v3.1
+
+## 手机示教（Jetson）
+
+### 1. 编译 arm bridge
+
+```bash
 cd xCoreSDK_cpp-v0.7.1
 cmake -S . -B build -DXCORE_USE_XMATE_MODEL=OFF
 cmake --build build --target arm_bridge -j4
+```
 
+### 2. 启动示教
+
+```bash
 conda activate tidybot2
+```
 
+终端 1：
+
+```bash
 python arm_server.py
+```
 
+终端 2：
+
+```bash
 python main.py --teleop --ssl --save
+```
+
+## 模型训练
+
+### 1. 将采集数据转换为 HDF5
+
+假设数据目录为 `src/tidybot2/data/demos`：
+
+```bash
+cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2
+python convert_to_robomimic_hdf5.py \
+	--input-dir data/demos \
+	--output-path ../diffusion_policy/data/p500_er3p_v1.hdf5
+```
+
+### 2. 在 diffusion_policy 中启动训练
+
+```bash
+cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+conda activate robodiff
+python train.py \
+	--config-name=train_diffusion_unet_real_hybrid_workspace \
+	task=square_image_abs \
+	task.name=p500_er3p_v1
+```
+
+### 3. 训练输出位置
+
+- 日志与模型输出目录：
+	`src/diffusion_policy/data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_p500_er3p_v1/`
+- 可用于推理的模型示例：
+	`src/diffusion_policy/data/outputs/.../checkpoints/epoch=0500-train_loss=xxx.ckpt`
+
+### 4. （可选）启动策略推理服务
+
+```bash
+cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+conda activate robodiff
+python /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2/policy_server.py \
+	--ckpt-path data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_p500_er3p_v1/checkpoints/<你的ckpt>.ckpt
+```
