@@ -5,6 +5,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "Eigen/Core"
 #include "Eigen/Geometry"
@@ -27,7 +28,22 @@ struct Config {
   double follow_scale = 0.35;
   double cmd_timeout = 0.25;
   double filter_freq = 15.0;
+  double tcp_offset_z = 0.10;
+  std::array<double, 7> preset_joints_deg = {0.0, 30.0, 0.0, 60.0, 0.0, 90.0, 0.0};
 };
+
+bool parse_csv7(const std::string &text, std::array<double, 7> &out) {
+  std::stringstream ss(text);
+  std::string item;
+  std::vector<double> vals;
+  while (std::getline(ss, item, ',')) {
+    if (item.empty()) continue;
+    vals.push_back(std::stod(item));
+  }
+  if (vals.size() != 7) return false;
+  for (size_t i = 0; i < 7; ++i) out[i] = vals[i];
+  return true;
+}
 
 void print_err(const std::string &msg) {
   std::cout << "ERR " << msg << std::endl;
@@ -83,6 +99,12 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--follow-scale") cfg.follow_scale = std::stod(need_val(arg));
     else if (arg == "--cmd-timeout") cfg.cmd_timeout = std::stod(need_val(arg));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
+    else if (arg == "--tcp-offset-z") cfg.tcp_offset_z = std::stod(need_val(arg));
+    else if (arg == "--preset-joints-deg") {
+      if (!parse_csv7(need_val(arg), cfg.preset_joints_deg)) {
+        throw std::runtime_error("bad value for --preset-joints-deg, expected 7 comma-separated numbers");
+      }
+    }
     else if (arg == "--max-pos-speed" || arg == "--max-rot-speed" ||
              arg == "--max-pos-accel" || arg == "--max-rot-accel" ||
              arg == "--speed" || arg == "--zone") {
@@ -107,6 +129,18 @@ Eigen::Transform<double, 3, Eigen::Isometry> posture_to_transform(const std::arr
   return tf;
 }
 
+Eigen::Transform<double, 3, Eigen::Isometry> trans_array_to_transform(const std::array<double, 16> &tf_array) {
+  Eigen::Matrix4d mat = Eigen::Matrix4d::Identity();
+  for (int r = 0; r < 4; ++r) {
+    for (int c = 0; c < 4; ++c) {
+      mat(r, c) = tf_array[4 * r + c];
+    }
+  }
+  Eigen::Transform<double, 3, Eigen::Isometry> tf;
+  tf.matrix() = mat;
+  return tf;
+}
+
 Eigen::Transform<double, 3, Eigen::Isometry> pose_quat_to_transform(double x, double y, double z,
                                                                      double qx, double qy, double qz, double qw) {
   Eigen::Quaterniond quat(qw, qx, qy, qz);
@@ -120,6 +154,25 @@ Eigen::Transform<double, 3, Eigen::Isometry> pose_quat_to_transform(double x, do
   tf.linear() = quat.toRotationMatrix();
   tf.translation() = Eigen::Vector3d(x, y, z);
   return tf;
+}
+
+Eigen::Transform<double, 3, Eigen::Isometry> flange_to_tool_tf(double offset_z) {
+  Eigen::Transform<double, 3, Eigen::Isometry> tf = Eigen::Transform<double, 3, Eigen::Isometry>::Identity();
+  tf.translation() = Eigen::Vector3d(0.0, 0.0, offset_z);
+  return tf;
+}
+
+std::array<double, 6> transform_to_posture(const Eigen::Transform<double, 3, Eigen::Isometry> &tf) {
+  std::array<double, 16> tf_array{};
+  const auto &mat = tf.matrix();
+  for (int r = 0; r < 4; ++r) {
+    for (int c = 0; c < 4; ++c) {
+      tf_array[4 * r + c] = mat(r, c);
+    }
+  }
+  std::array<double, 6> posture{};
+  Utils::transArrayToPosture(tf_array, posture);
+  return posture;
 }
 
 bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture) {
@@ -190,9 +243,16 @@ int main(int argc, char **argv) {
 
   rtCon->setFilterLimit(false, cfg.filter_freq);
 
+  const auto tf_f2t = flange_to_tool_tf(cfg.tcp_offset_z);
+  const auto tf_t2f = tf_f2t.inverse();
+
   auto model = robot.model();
   FollowPosition<7> follow_pose(robot, model);
   follow_pose.setScale(cfg.follow_scale);
+
+  const auto preset_joint_rad = Utils::degToRad(cfg.preset_joints_deg);
+  const auto preset_tf_arr = model.getCartPose(preset_joint_rad);
+  const auto preset_target_tf = trans_array_to_transform(preset_tf_arr);
 
   std::atomic<bool> follow_started(false);
   std::array<double, 6> current_posture{};
@@ -244,6 +304,24 @@ int main(int argc, char **argv) {
       continue;
     }
 
+    if (cmd == "PRESET") {
+      try {
+        if (!follow_started.load()) {
+          follow_pose.setScale(cfg.follow_scale);
+          follow_pose.start(preset_target_tf);
+          follow_started.store(true);
+        } else {
+          follow_pose.update(preset_target_tf);
+        }
+      } catch (const std::exception &e) {
+        print_err(std::string("preset_update:") + e.what());
+        continue;
+      }
+      last_exec_tp = std::chrono::steady_clock::now();
+      std::cout << "OK" << std::endl;
+      continue;
+    }
+
     if (cmd == "EXEC") {
       double x, y, z;
       if (!(iss >> x >> y >> z)) {
@@ -273,6 +351,10 @@ int main(int argc, char **argv) {
         continue;
       }
 
+      // External API target is tool center point (TCP at gripper center),
+      // while controller follows flange pose.
+      target_tf = target_tf * tf_t2f;
+
       try {
         if (!follow_started.load()) {
           follow_pose.setScale(cfg.follow_scale);
@@ -298,9 +380,15 @@ int main(int argc, char **argv) {
       if (!read_current_posture(robot, posture)) {
         posture = current_posture;
       }
+
+      // Convert reported pose from flange to tool center point.
+      const auto flange_tf = posture_to_transform(posture);
+      const auto tool_tf = flange_tf * tf_f2t;
+      const auto tool_posture = transform_to_posture(tool_tf);
+
       std::cout << "STATE "
-                << posture[0] << " " << posture[1] << " " << posture[2] << " "
-                << posture[3] << " " << posture[4] << " " << posture[5] << " "
+                << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
+                << tool_posture[3] << " " << tool_posture[4] << " " << tool_posture[5] << " "
                 << gripper_pos << std::endl;
       continue;
     }
