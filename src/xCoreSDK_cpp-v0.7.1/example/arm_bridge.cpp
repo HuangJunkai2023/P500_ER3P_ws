@@ -107,6 +107,21 @@ Eigen::Transform<double, 3, Eigen::Isometry> posture_to_transform(const std::arr
   return tf;
 }
 
+Eigen::Transform<double, 3, Eigen::Isometry> pose_quat_to_transform(double x, double y, double z,
+                                                                     double qx, double qy, double qz, double qw) {
+  Eigen::Quaterniond quat(qw, qx, qy, qz);
+  if (quat.norm() < 1e-12) {
+    quat = Eigen::Quaterniond::Identity();
+  } else {
+    quat.normalize();
+  }
+
+  Eigen::Transform<double, 3, Eigen::Isometry> tf = Eigen::Transform<double, 3, Eigen::Isometry>::Identity();
+  tf.linear() = quat.toRotationMatrix();
+  tf.translation() = Eigen::Vector3d(x, y, z);
+  return tf;
+}
+
 bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture) {
   try {
     std::array<double, 16> measured{};
@@ -230,20 +245,41 @@ int main(int argc, char **argv) {
     }
 
     if (cmd == "EXEC") {
-      double x, y, z, rx, ry, rz, grip;
-      if (!(iss >> x >> y >> z >> rx >> ry >> rz >> grip)) {
+      double x, y, z;
+      if (!(iss >> x >> y >> z)) {
         print_err("bad_exec_args");
         continue;
       }
 
-      std::array<double, 6> target_posture = {x, y, z, rx, ry, rz};
+      std::vector<double> rest;
+      double v;
+      while (iss >> v) {
+        rest.push_back(v);
+      }
+
+      Eigen::Transform<double, 3, Eigen::Isometry> target_tf;
+      double grip = 0.0;
+      if (rest.size() == 5) {
+        // New format: x y z qx qy qz qw grip
+        target_tf = pose_quat_to_transform(x, y, z, rest[0], rest[1], rest[2], rest[3]);
+        grip = rest[4];
+      } else if (rest.size() == 4) {
+        // Legacy format: x y z rx ry rz grip
+        std::array<double, 6> target_posture = {x, y, z, rest[0], rest[1], rest[2]};
+        target_tf = posture_to_transform(target_posture);
+        grip = rest[3];
+      } else {
+        print_err("bad_exec_args");
+        continue;
+      }
+
       try {
         if (!follow_started.load()) {
           follow_pose.setScale(cfg.follow_scale);
-          follow_pose.start(posture_to_transform(target_posture));
+          follow_pose.start(target_tf);
           follow_started.store(true);
         } else {
-          follow_pose.update(posture_to_transform(target_posture));
+          follow_pose.update(target_tf);
         }
       } catch (const std::exception &e) {
         print_err(std::string("follow_update:") + e.what());

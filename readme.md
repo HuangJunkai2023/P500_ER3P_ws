@@ -6,3 +6,4 @@ cmake --build build --target arm_bridge -j4
 
 conda activate tidybot2
 python arm_server.py
+python main.py --teleop --ssl --save
