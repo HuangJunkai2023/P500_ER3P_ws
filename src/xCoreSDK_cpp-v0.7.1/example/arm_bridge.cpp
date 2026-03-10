@@ -5,6 +5,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include "Eigen/Core"
@@ -29,6 +30,8 @@ struct Config {
   double cmd_timeout = 0.25;
   double filter_freq = 15.0;
   double tcp_offset_z = 0.10;
+  double move_speed = 300.0;
+  double move_zone = 10.0;
   std::array<double, 7> preset_joints_deg = {0.0, 30.0, 0.0, 60.0, 0.0, 90.0, 0.0};
 };
 
@@ -100,14 +103,15 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--cmd-timeout") cfg.cmd_timeout = std::stod(need_val(arg));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
     else if (arg == "--tcp-offset-z") cfg.tcp_offset_z = std::stod(need_val(arg));
+    else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
+    else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--preset-joints-deg") {
       if (!parse_csv7(need_val(arg), cfg.preset_joints_deg)) {
         throw std::runtime_error("bad value for --preset-joints-deg, expected 7 comma-separated numbers");
       }
     }
     else if (arg == "--max-pos-speed" || arg == "--max-rot-speed" ||
-             arg == "--max-pos-accel" || arg == "--max-rot-accel" ||
-             arg == "--speed" || arg == "--zone") {
+             arg == "--max-pos-accel" || arg == "--max-rot-accel") {
       (void)need_val(arg);
     }
     else return false;
@@ -186,6 +190,19 @@ bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture
   }
 }
 
+bool wait_robot_idle(xMateErProRobot &robot, std::chrono::milliseconds timeout) {
+  const auto start = std::chrono::steady_clock::now();
+  while (std::chrono::steady_clock::now() - start < timeout) {
+    error_code ec;
+    auto st = robot.operationState(ec);
+    if (!ec && (st == OperationState::idle || st == OperationState::unknown)) {
+      return true;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  }
+  return false;
+}
+
 } // namespace
 
 int main(int argc, char **argv) {
@@ -251,6 +268,7 @@ int main(int argc, char **argv) {
   follow_pose.setScale(cfg.follow_scale);
 
   const auto preset_joint_rad = Utils::degToRad(cfg.preset_joints_deg);
+  const JointPosition preset_joint_pos(std::vector<double>(preset_joint_rad.begin(), preset_joint_rad.end()));
   const auto preset_tf_arr = model.getCartPose(preset_joint_rad);
   const auto preset_target_tf = trans_array_to_transform(preset_tf_arr);
 
@@ -270,6 +288,22 @@ int main(int argc, char **argv) {
 
   std::cout << "READY" << std::endl;
 
+  auto restart_follow_from_current = [&]() -> bool {
+    if (!read_current_posture(robot, current_posture)) {
+      print_err("read_current_posture");
+      return false;
+    }
+    try {
+      follow_pose.setScale(cfg.follow_scale);
+      follow_pose.start(posture_to_transform(current_posture));
+      follow_started.store(true);
+      return true;
+    } catch (const std::exception &e) {
+      print_err(std::string("follow_restart:") + e.what());
+      return false;
+    }
+  };
+
   std::string line;
   double gripper_pos = 1.0;
   while (std::getline(std::cin, line)) {
@@ -284,19 +318,44 @@ int main(int argc, char **argv) {
     iss >> cmd;
 
     if (cmd == "RESET") {
-      if (read_current_posture(robot, current_posture)) {
-        try {
-          if (follow_started.load()) {
-            follow_pose.stop();
-            follow_started.store(false);
-          }
-          follow_pose.setScale(cfg.follow_scale);
-          follow_pose.start(posture_to_transform(current_posture));
-          follow_started.store(true);
-        } catch (const std::exception &e) {
-          print_err(std::string("follow_reset:") + e.what());
+      try {
+        if (follow_started.load()) {
+          follow_pose.stop();
+          follow_started.store(false);
         }
+      } catch (const std::exception &e) {
+        print_err(std::string("follow_stop:") + e.what());
       }
+
+      // Use MoveAbsJ for reset so the arm moves smoothly in joint space to teleop preset.
+      robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
+      if (!check_ec(ec, "setMotionControlMode(NrtCommand)")) continue;
+      robot.setOperateMode(OperateMode::automatic, ec);
+      if (!check_ec(ec, "setOperateMode")) continue;
+      robot.setPowerState(true, ec);
+      if (!check_ec(ec, "setPowerState")) continue;
+
+      MoveAbsJCommand move_absj(preset_joint_pos, cfg.move_speed, cfg.move_zone);
+      robot.executeCommand({move_absj}, ec);
+      if (!check_ec(ec, "executeCommand(MoveAbsJCommand)")) continue;
+      if (!wait_robot_idle(robot, std::chrono::seconds(30))) {
+        print_err("wait_robot_idle_timeout");
+        continue;
+      }
+
+      robot.setRtNetworkTolerance(40.0, ec);
+      warn_ec(ec, "setRtNetworkTolerance");
+      robot.setMotionControlMode(MotionControlMode::RtCommand, ec);
+      if (!check_ec(ec, "setMotionControlMode(RtCommand)")) continue;
+      robot.setOperateMode(OperateMode::automatic, ec);
+      if (!check_ec(ec, "setOperateMode")) continue;
+      robot.setPowerState(true, ec);
+      if (!check_ec(ec, "setPowerState")) continue;
+
+      if (!restart_follow_from_current()) {
+        continue;
+      }
+
       last_exec_tp = std::chrono::steady_clock::now();
       gripper_pos = 1.0;
       set_gripper(robot, cfg, gripper_pos);
