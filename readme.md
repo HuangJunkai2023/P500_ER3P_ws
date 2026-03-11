@@ -1,5 +1,21 @@
 # P500 + ER3Pro 使用说明
 
+## 快速开始（先做这一步）
+
+使用 ROS1 Docker（推荐这一种方式）：
+
+```bash
+cd /home/hx/P500_ER3P_ws && docker compose run --rm ros1
+```
+
+进入容器后运行：
+
+```bash
+python3 /workspace/src/p500/docker_cmd_vel_server.py --udp-port 15000
+```
+
+退出容器：`Ctrl + D`
+
 ## 机械臂 SDK
 
 - 下载地址：http://sw.rokae.com:8800/?dir=xcore/SDK/v3.1
@@ -20,17 +36,48 @@ cmake --build build --target arm_bridge -j4
 conda activate tidybot2
 ```
 
-终端 1：
+先确认 `src/tidybot2/constants.py` 中底盘后端配置为：
+
+```python
+ENABLE_BASE = True
+BASE_BACKEND = 'ros1_udp'
+BASE_CMD_UDP_HOST = '127.0.0.1'
+BASE_CMD_UDP_PORT = 15000
+
+# 夹爪：通过机械臂末端 RS485 控制 Jodell EPG
+ER3PRO_ENABLE_GRIPPER = True
+ER3PRO_GRIPPER_BACKEND = 'rs485_epg'
+ER3PRO_GRIPPER_RS485_SLAVE_ID = 9
+```
+
+终端 1（ROS1 Docker 内）：
+
+```bash
+python /workspace/src/p500/docker_cmd_vel_server.py --udp-port 15000
+```
+
+终端 2（工作区 `src/tidybot2`）：
+
+```bash
+python base_server.py
+```
+
+终端 3（工作区 `src/tidybot2`）：
 
 ```bash
 python arm_server.py
 ```
 
-终端 2：
+终端 4（工作区 `src/tidybot2`）：
 
 ```bash
 python main.py --teleop --ssl --save
 ```
+
+说明：
+- `base_server.py` 接收 `tidybot` 的 `base_pose` 目标并转换为速度命令。
+- `docker_cmd_vel_server.py` 在 ROS1 中发布到底盘 `/cmd_vel`。
+- 如果 ROS1 Docker 不在本机，修改 `BASE_CMD_UDP_HOST` 为 ROS1 侧可达 IP。
 
 ## 模型训练
 

@@ -1,5 +1,6 @@
 #include <array>
 #include <atomic>
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <mutex>
@@ -18,14 +19,32 @@ using namespace rokae;
 
 namespace {
 
+enum class GripperBackend {
+  Di,
+  Rs485Epg,
+};
+
 struct Config {
   std::string robot_ip = "192.168.0.160";
   std::string local_ip = "";
   bool enable_gripper = true;
+  GripperBackend gripper_backend = GripperBackend::Di;
   double gripper_threshold = 0.5;
   unsigned int gripper_board = 2;
   unsigned int gripper_di1_port = 0;
   unsigned int gripper_di2_port = 1;
+  int gripper_rs485_slave_id = 9;
+  bool gripper_rs485_enable_on_start = false;
+  int gripper_rs485_init_reg = 0x0100;
+  int gripper_rs485_init_value = 0x00A5;
+  int gripper_rs485_torque_reg = 0x0101;
+  int gripper_rs485_pos_reg = 0x0103;
+  int gripper_rs485_speed_reg = 0x0104;
+  int gripper_rs485_pos_now_reg = 0x0202;
+  int gripper_rs485_open_pos = 0;
+  int gripper_rs485_close_pos = 255;
+  int gripper_rs485_speed = 255;
+  int gripper_rs485_torque = 80;
   double follow_scale = 0.35;
   double cmd_timeout = 0.25;
   double filter_freq = 15.0;
@@ -66,8 +85,64 @@ void warn_ec(const error_code &ec, const std::string &ctx) {
   }
 }
 
+int parse_int_auto_base(const std::string &s) {
+  return static_cast<int>(std::stol(s, nullptr, 0));
+}
+
+bool write_modbus_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int value, const std::string &ctx) {
+  error_code ec;
+  std::vector<int> data = {value};
+  robot.XPRWModbusRTUReg(slave_id, 0x06, reg_addr, "int16", 1, data, false, ec);
+  if (ec) {
+    std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
+    return false;
+  }
+  return true;
+}
+
+bool read_modbus_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int &value, const std::string &ctx) {
+  error_code ec;
+  std::vector<int> data = {0};
+  robot.XPRWModbusRTUReg(slave_id, 0x03, reg_addr, "int16", 1, data, false, ec);
+  if (ec) {
+    std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
+    return false;
+  }
+  value = data[0];
+  return true;
+}
+
+void init_rs485_gripper(xMateErProRobot &robot, const Config &cfg) {
+  error_code ec;
+  robot.setxPanelRS485(xPanelOpt::Vout::supply24v, true, ec);
+  if (ec) {
+    std::cerr << "WARN setxPanelRS485:" << ec.message() << std::endl;
+    return;
+  }
+
+  if (cfg.gripper_rs485_enable_on_start) {
+    write_modbus_reg(
+        robot,
+        cfg.gripper_rs485_slave_id,
+        cfg.gripper_rs485_init_reg,
+        cfg.gripper_rs485_init_value,
+        "epg_init");
+  }
+}
+
 void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
   if (!cfg.enable_gripper) {
+    return;
+  }
+
+  if (cfg.gripper_backend == GripperBackend::Rs485Epg) {
+    // Keep tidybot convention: 1.0=open, 0.0=close.
+    const double ratio = std::clamp(value, 0.0, 1.0);
+    const int target_pos = static_cast<int>(
+      std::round(cfg.gripper_rs485_close_pos + ratio * (cfg.gripper_rs485_open_pos - cfg.gripper_rs485_close_pos)));
+    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_torque_reg, cfg.gripper_rs485_torque, "epg_set_torque");
+    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_speed_reg, cfg.gripper_rs485_speed, "epg_set_speed");
+    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_reg, target_pos, "epg_set_position");
     return;
   }
 
@@ -95,10 +170,28 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     if (arg == "--robot-ip") cfg.robot_ip = need_val(arg);
     else if (arg == "--local-ip") cfg.local_ip = need_val(arg);
     else if (arg == "--disable-gripper") cfg.enable_gripper = false;
+    else if (arg == "--gripper-backend") {
+      const auto backend = need_val(arg);
+      if (backend == "di") cfg.gripper_backend = GripperBackend::Di;
+      else if (backend == "rs485_epg") cfg.gripper_backend = GripperBackend::Rs485Epg;
+      else throw std::runtime_error("unsupported --gripper-backend: " + backend);
+    }
     else if (arg == "--gripper-threshold") cfg.gripper_threshold = std::stod(need_val(arg));
     else if (arg == "--gripper-board") cfg.gripper_board = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--gripper-di1-port") cfg.gripper_di1_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
     else if (arg == "--gripper-di2-port") cfg.gripper_di2_port = static_cast<unsigned int>(std::stoul(need_val(arg)));
+    else if (arg == "--gripper-rs485-slave-id") cfg.gripper_rs485_slave_id = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-enable-on-start") cfg.gripper_rs485_enable_on_start = true;
+    else if (arg == "--gripper-rs485-init-reg") cfg.gripper_rs485_init_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-init-value") cfg.gripper_rs485_init_value = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-torque-reg") cfg.gripper_rs485_torque_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-pos-reg") cfg.gripper_rs485_pos_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-speed-reg") cfg.gripper_rs485_speed_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-pos-now-reg") cfg.gripper_rs485_pos_now_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-open-pos") cfg.gripper_rs485_open_pos = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-close-pos") cfg.gripper_rs485_close_pos = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-speed") cfg.gripper_rs485_speed = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-torque") cfg.gripper_rs485_torque = parse_int_auto_base(need_val(arg));
     else if (arg == "--follow-scale") cfg.follow_scale = std::stod(need_val(arg));
     else if (arg == "--cmd-timeout") cfg.cmd_timeout = std::stod(need_val(arg));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
@@ -237,6 +330,10 @@ int main(int argc, char **argv) {
   if (!check_ec(ec, "setPowerState")) return 1;
   robot.clearServoAlarm(ec);
   warn_ec(ec, "clearServoAlarm");
+
+  if (cfg.enable_gripper && cfg.gripper_backend == GripperBackend::Rs485Epg) {
+    init_rs485_gripper(robot, cfg);
+  }
 
   try {
     robot.startReceiveRobotState(std::chrono::milliseconds(1), {RtSupportedFields::tcpPose_m});
@@ -444,6 +541,17 @@ int main(int argc, char **argv) {
       const auto flange_tf = posture_to_transform(posture);
       const auto tool_tf = flange_tf * tf_f2t;
       const auto tool_posture = transform_to_posture(tool_tf);
+
+      if (cfg.enable_gripper && cfg.gripper_backend == GripperBackend::Rs485Epg) {
+        int pos_now_raw = 0;
+        if (read_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_now_reg, pos_now_raw, "epg_get_position")) {
+          const double denom = static_cast<double>(cfg.gripper_rs485_open_pos - cfg.gripper_rs485_close_pos);
+          if (std::abs(denom) > 1e-6) {
+            const double ratio = (static_cast<double>(pos_now_raw) - cfg.gripper_rs485_close_pos) / denom;
+            gripper_pos = std::clamp(ratio, 0.0, 1.0);
+          }
+        }
+      }
 
       std::cout << "STATE "
                 << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
