@@ -100,10 +100,32 @@ bool write_modbus_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int va
   return true;
 }
 
+bool write_modbus_regs(xMateErProRobot &robot, int slave_id, int reg_addr, std::vector<int> data, const std::string &ctx) {
+  error_code ec;
+  robot.XPRWModbusRTUReg(slave_id, 0x10, reg_addr, "int16", static_cast<int>(data.size()), data, false, ec);
+  if (ec) {
+    std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
+    return false;
+  }
+  return true;
+}
+
 bool read_modbus_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int &value, const std::string &ctx) {
   error_code ec;
   std::vector<int> data = {0};
   robot.XPRWModbusRTUReg(slave_id, 0x03, reg_addr, "int16", 1, data, false, ec);
+  if (ec) {
+    std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
+    return false;
+  }
+  value = data[0];
+  return true;
+}
+
+bool read_modbus_input_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int &value, const std::string &ctx) {
+  error_code ec;
+  std::vector<int> data = {0};
+  robot.XPRWModbusRTUReg(slave_id, 0x04, reg_addr, "int16", 1, data, false, ec);
   if (ec) {
     std::cerr << "WARN " << ctx << ":" << ec.message() << std::endl;
     return false;
@@ -121,6 +143,14 @@ void init_rs485_gripper(xMateErProRobot &robot, const Config &cfg) {
   }
 
   if (cfg.gripper_rs485_enable_on_start) {
+    // Force serial communication mode (Jodell: 0x03FD = 0x00 for serial mode).
+    write_modbus_reg(
+      robot,
+      cfg.gripper_rs485_slave_id,
+      cfg.gripper_rs485_torque_reg,
+      0x0000,
+      "epg_switch_serial_mode");
+
     write_modbus_reg(
         robot,
         cfg.gripper_rs485_slave_id,
@@ -138,11 +168,19 @@ void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
   if (cfg.gripper_backend == GripperBackend::Rs485Epg) {
     // Keep tidybot convention: 1.0=open, 0.0=close.
     const double ratio = std::clamp(value, 0.0, 1.0);
-    const int target_pos = static_cast<int>(
-      std::round(cfg.gripper_rs485_close_pos + ratio * (cfg.gripper_rs485_open_pos - cfg.gripper_rs485_close_pos)));
-    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_torque_reg, cfg.gripper_rs485_torque, "epg_set_torque");
-    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_speed_reg, cfg.gripper_rs485_speed, "epg_set_speed");
-    write_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_reg, target_pos, "epg_set_position");
+    const int target_pos = std::clamp(static_cast<int>(
+      std::round(cfg.gripper_rs485_close_pos + ratio * (cfg.gripper_rs485_open_pos - cfg.gripper_rs485_close_pos))), 0, 255);
+    const int speed = std::clamp(cfg.gripper_rs485_speed, 0, 255);
+    const int torque = std::clamp(cfg.gripper_rs485_torque, 0, 255);
+
+    // Jodell EPG runWithParam protocol:
+    // write 3 regs from 0x03E8: [0x0009, pos<<8, speed | (torque<<8)]
+    std::vector<int> cmd = {
+      0x0009,
+      (target_pos & 0xFF) << 8,
+      (speed & 0xFF) | ((torque & 0xFF) << 8),
+    };
+    write_modbus_regs(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_reg, cmd, "epg_run_with_param");
     return;
   }
 
@@ -544,7 +582,9 @@ int main(int argc, char **argv) {
 
       if (cfg.enable_gripper && cfg.gripper_backend == GripperBackend::Rs485Epg) {
         int pos_now_raw = 0;
-        if (read_modbus_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_now_reg, pos_now_raw, "epg_get_position")) {
+        if (read_modbus_input_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_now_reg, pos_now_raw, "epg_get_position")) {
+          // Jodell reports clamp position in high byte.
+          pos_now_raw = (pos_now_raw >> 8) & 0xFF;
           const double denom = static_cast<double>(cfg.gripper_rs485_open_pos - cfg.gripper_rs485_close_pos);
           if (std::abs(denom) > 1e-6) {
             const double ratio = (static_cast<double>(pos_now_raw) - cfg.gripper_rs485_close_pos) / denom;
