@@ -89,6 +89,11 @@ int parse_int_auto_base(const std::string &s) {
   return static_cast<int>(std::stol(s, nullptr, 0));
 }
 
+int to_signed_int16_word(int value) {
+  const int u16 = value & 0xFFFF;
+  return (u16 >= 0x8000) ? (u16 - 0x10000) : u16;
+}
+
 bool write_modbus_reg(xMateErProRobot &robot, int slave_id, int reg_addr, int value, const std::string &ctx) {
   error_code ec;
   std::vector<int> data = {value};
@@ -176,9 +181,9 @@ void set_gripper(xMateErProRobot &robot, const Config &cfg, double value) {
     // Jodell EPG runWithParam protocol:
     // write 3 regs from 0x03E8: [0x0009, pos<<8, speed | (torque<<8)]
     std::vector<int> cmd = {
-      0x0009,
-      (target_pos & 0xFF) << 8,
-      (speed & 0xFF) | ((torque & 0xFF) << 8),
+      to_signed_int16_word(0x0009),
+      to_signed_int16_word((target_pos & 0xFF) << 8),
+      to_signed_int16_word((speed & 0xFF) | ((torque & 0xFF) << 8)),
     };
     write_modbus_regs(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_reg, cmd, "epg_run_with_param");
     return;
