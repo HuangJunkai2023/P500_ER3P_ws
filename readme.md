@@ -81,40 +81,88 @@ python main.py --teleop --ssl --save
 
 ## 模型训练
 
-### 1. 将采集数据转换为 HDF5
+### 1. 训练前确认
 
-假设数据目录为 `src/tidybot2/data/demos`：
+当前工作区已经有：
 
-```bash
-cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2
-python convert_to_robomimic_hdf5.py \
-	--input-dir data/demos \
-	--output-path ../diffusion_policy/data/p500_er3p_v1.hdf5
+- 数据目录：`src/tidybot2/data/demos`
+- 训练仓库：`src/diffusion_policy`
+- Conda 环境：`robodiff`
+
+另外，`src/diffusion_policy` 需要已经包含 `tidybot2` 的 patch 改动，即：
+
+- `diffusion_policy/config/task/square_image_abs.yaml` 使用 `base_image`、`wrist_image`、`base_pose`、`arm_pos`、`arm_quat`、`gripper_pos`
+- 数据路径格式为 `data/${task.name}.hdf5`
+
+本工作区当前实际使用的任务名是 `demos`，对应配置文件：
+
+```yaml
+# src/diffusion_policy/diffusion_policy/config/task/square_image_abs.yaml
+name: demos
 ```
 
-### 2. 在 diffusion_policy 中启动训练
+### 2. 将采集数据转换为 HDF5
+
+这一步实际是在 `robodiff` 环境中执行的，因为转换脚本依赖 `cv2`。
+
+```bash
+cd /home/huaxi/scu_robotics/P500_ER3P_ws
+source /home/huaxi/miniconda3/etc/profile.d/conda.sh
+conda activate robodiff
+python src/tidybot2/convert_to_robomimic_hdf5.py \
+  --input-dir src/tidybot2/data/demos \
+  --output-path src/diffusion_policy/data/demos.hdf5
+```
+
+生成结果：
+
+- HDF5 文件：`src/diffusion_policy/data/demos.hdf5`
+
+### 3. 启动训练
 
 ```bash
 cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+source /home/huaxi/miniconda3/etc/profile.d/conda.sh
 conda activate robodiff
-python train.py \
-	--config-name=train_diffusion_unet_real_hybrid_workspace \
-	task=square_image_abs \
-	task.name=p500_er3p_v1
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+python train.py --config-name=train_diffusion_unet_real_hybrid_workspace
 ```
 
-### 3. 训练输出位置
+说明：
+
+- `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python` 是当前环境里必须加的兼容项。
+- 原因是升级 `wandb` 后，`tensorboard/protobuf` 组合会触发 `Descriptors cannot be created directly` 错误。
+- 如果后续把环境重新整理到兼容版本，这个环境变量可以再评估是否移除。
+
+### 4. wandb 登录
+
+训练前需要先在 `robodiff` 环境里完成一次登录：
+
+```bash
+cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+source /home/huaxi/miniconda3/etc/profile.d/conda.sh
+conda activate robodiff
+wandb login
+```
+
+
+### 5. 训练输出位置
 
 - 日志与模型输出目录：
-	`src/diffusion_policy/data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_p500_er3p_v1/`
+  `src/diffusion_policy/data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_demos/`
 - 可用于推理的模型示例：
-	`src/diffusion_policy/data/outputs/.../checkpoints/epoch=0500-train_loss=xxx.ckpt`
+  `src/diffusion_policy/data/outputs/.../checkpoints/epoch=0500-train_loss=xxx.ckpt`
 
-### 4. （可选）启动策略推理服务
+本次实际启动的训练目录示例：
+
+- `src/diffusion_policy/data/outputs/2026.03.13/16.56.14_train_diffusion_unet_hybrid_demos/`
+
+### 6. （可选）启动策略推理服务
 
 ```bash
 cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+source /home/huaxi/miniconda3/etc/profile.d/conda.sh
 conda activate robodiff
 python /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2/policy_server.py \
-	--ckpt-path data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_p500_er3p_v1/checkpoints/<你的ckpt>.ckpt
+  --ckpt-path data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_demos/checkpoints/<你的ckpt>.ckpt
 ```
