@@ -14,6 +14,8 @@ cd /home/hx/P500_ER3P_ws && docker compose run --rm ros1
 python3 /workspace/src/p500/docker_cmd_vel_server.py --udp-port 15000
 ```
 
+## 注意要打开浏览器192.168.0.100进入底盘管理网页点击建图激活底盘
+
 退出容器：`Ctrl + D`
 
 ## 机械臂 SDK
