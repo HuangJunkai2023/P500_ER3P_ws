@@ -61,19 +61,19 @@ python /workspace/src/p500/docker_cmd_vel_server.py --udp-port 15000
 终端 2（工作区 `src/tidybot2`）：
 
 ```bash
-python base_server.py
+python src/tidybot2/base_server.py
 ```
 
 终端 3（工作区 `src/tidybot2`）：
 
 ```bash
-python arm_server.py
+python src/tidybot2/arm_server.py
 ```
 
 终端 4（工作区 `src/tidybot2`）：
 
 ```bash
-python main.py --teleop --ssl --save
+python src/tidybot2/main.py --teleop --ssl --save
 ```
 
 说明：
