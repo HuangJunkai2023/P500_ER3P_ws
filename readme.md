@@ -167,4 +167,14 @@ source /home/huaxi/miniconda3/etc/profile.d/conda.sh
 conda activate robodiff
 python /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2/policy_server.py \
   --ckpt-path data/outputs/<日期>/<时间>_train_diffusion_unet_hybrid_demos/checkpoints/<你的ckpt>.ckpt
+
+例如
+cd /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+source /home/huaxi/miniconda3/etc/profile.d/conda.sh
+conda activate robodiff
+export PYTHONPATH=/home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+python /home/huaxi/scu_robotics/P500_ER3P_ws/src/tidybot2/policy_server.py \
+  --ckpt-path /home/huaxi/scu_robotics/P500_ER3P_ws/src/diffusion_policy/data/outputs/2026.03.15/17.26.15_train_diffusion_unet_hybrid_demos/checkpoints/latest.ckpt
+
 ```
