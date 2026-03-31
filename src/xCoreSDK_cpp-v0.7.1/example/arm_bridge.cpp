@@ -41,6 +41,7 @@ struct Config {
   int gripper_rs485_pos_reg = 0x0103;
   int gripper_rs485_speed_reg = 0x0104;
   int gripper_rs485_pos_now_reg = 0x0202;
+  int gripper_rs485_force_now_reg = 0x0203;
   int gripper_rs485_open_pos = 0;
   int gripper_rs485_close_pos = 255;
   int gripper_rs485_speed = 255;
@@ -231,6 +232,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--gripper-rs485-pos-reg") cfg.gripper_rs485_pos_reg = parse_int_auto_base(need_val(arg));
     else if (arg == "--gripper-rs485-speed-reg") cfg.gripper_rs485_speed_reg = parse_int_auto_base(need_val(arg));
     else if (arg == "--gripper-rs485-pos-now-reg") cfg.gripper_rs485_pos_now_reg = parse_int_auto_base(need_val(arg));
+    else if (arg == "--gripper-rs485-force-now-reg") cfg.gripper_rs485_force_now_reg = parse_int_auto_base(need_val(arg));
     else if (arg == "--gripper-rs485-open-pos") cfg.gripper_rs485_open_pos = parse_int_auto_base(need_val(arg));
     else if (arg == "--gripper-rs485-close-pos") cfg.gripper_rs485_close_pos = parse_int_auto_base(need_val(arg));
     else if (arg == "--gripper-rs485-speed") cfg.gripper_rs485_speed = parse_int_auto_base(need_val(arg));
@@ -446,6 +448,7 @@ int main(int argc, char **argv) {
 
   std::string line;
   double gripper_pos = 1.0;
+  double gripper_force = 0.0;
   while (std::getline(std::cin, line)) {
     if (line.empty()) continue;
 
@@ -596,12 +599,18 @@ int main(int argc, char **argv) {
             gripper_pos = std::clamp(ratio, 0.0, 1.0);
           }
         }
+
+        int force_now_raw = 0;
+        if (read_modbus_input_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_force_now_reg, force_now_raw, "epg_get_force")) {
+          // Jodell reports clamp force in high byte.
+          gripper_force = static_cast<double>((force_now_raw >> 8) & 0xFF);
+        }
       }
 
       std::cout << "STATE "
                 << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
                 << tool_posture[3] << " " << tool_posture[4] << " " << tool_posture[5] << " "
-                << gripper_pos << std::endl;
+                << gripper_pos << " " << gripper_force << std::endl;
       continue;
     }
 
