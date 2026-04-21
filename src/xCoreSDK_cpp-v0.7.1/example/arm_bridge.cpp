@@ -328,6 +328,15 @@ bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture
   }
 }
 
+bool read_current_joints(xMateErProRobot &robot, std::array<double, 7> &joints) {
+  try {
+    robot.getStateData(RtSupportedFields::jointPos_m, joints);
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
 bool wait_robot_idle(xMateErProRobot &robot, std::chrono::milliseconds timeout) {
   const auto start = std::chrono::steady_clock::now();
   while (std::chrono::steady_clock::now() - start < timeout) {
@@ -381,7 +390,7 @@ int main(int argc, char **argv) {
   }
 
   try {
-    robot.startReceiveRobotState(std::chrono::milliseconds(1), {RtSupportedFields::tcpPose_m});
+    robot.startReceiveRobotState(std::chrono::milliseconds(1), {RtSupportedFields::tcpPose_m, RtSupportedFields::jointPos_m});
     robot.updateRobotState(std::chrono::milliseconds(50));
   } catch (const std::exception &e) {
     print_err(std::string("startReceiveRobotState:") + e.what());
@@ -577,6 +586,44 @@ int main(int argc, char **argv) {
       continue;
     }
 
+    if (cmd == "EXECJ") {
+      std::array<double, 7> target_joints{};
+      for (double &joint : target_joints) {
+        if (!(iss >> joint)) {
+          print_err("bad_execj_args");
+          target_joints = {};
+          break;
+        }
+      }
+      if (!iss) {
+        continue;
+      }
+      double grip = 0.0;
+      if (!(iss >> grip)) {
+        print_err("bad_execj_args");
+        continue;
+      }
+
+      try {
+        if (!follow_started.load()) {
+          follow_pose.setScale(cfg.follow_scale);
+          follow_pose.start(target_joints);
+          follow_started.store(true);
+        } else {
+          follow_pose.update(target_joints);
+        }
+      } catch (const std::exception &e) {
+        print_err(std::string("follow_joint_update:") + e.what());
+        continue;
+      }
+
+      last_exec_tp = std::chrono::steady_clock::now();
+      gripper_pos = grip;
+      set_gripper(robot, cfg, gripper_pos);
+      std::cout << "OK" << std::endl;
+      continue;
+    }
+
     if (cmd == "STATE") {
       std::array<double, 6> posture{};
       if (!read_current_posture(robot, posture)) {
@@ -611,6 +658,42 @@ int main(int argc, char **argv) {
                 << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
                 << tool_posture[3] << " " << tool_posture[4] << " " << tool_posture[5] << " "
                 << gripper_pos << " " << gripper_force << std::endl;
+      continue;
+    }
+
+    if (cmd == "STATEJ") {
+      std::array<double, 7> joints{};
+      if (!read_current_joints(robot, joints)) {
+        print_err("read_current_joints");
+        continue;
+      }
+      std::cout << "STATEJ "
+                << joints[0] << " " << joints[1] << " " << joints[2] << " "
+                << joints[3] << " " << joints[4] << " " << joints[5] << " " << joints[6] << " "
+                << gripper_pos << " " << gripper_force << std::endl;
+      continue;
+    }
+
+    if (cmd == "FKJ") {
+      std::array<double, 7> joints{};
+      for (double &joint : joints) {
+        if (!(iss >> joint)) {
+          print_err("bad_fkj_args");
+          joints = {};
+          break;
+        }
+      }
+      if (!iss) {
+        continue;
+      }
+
+      const auto flange_tf_arr = model.getCartPose(joints);
+      const auto flange_tf = trans_array_to_transform(flange_tf_arr);
+      const auto tool_tf = flange_tf * tf_f2t;
+      const auto tool_posture = transform_to_posture(tool_tf);
+      std::cout << "FKJ "
+                << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
+                << tool_posture[3] << " " << tool_posture[4] << " " << tool_posture[5] << std::endl;
       continue;
     }
 
