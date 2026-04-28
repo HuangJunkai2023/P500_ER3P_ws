@@ -531,9 +531,16 @@ int main(int argc, char **argv) {
     auto rtCon = robot.getRtMotionController().lock();
     if (!rtCon) throw std::runtime_error("getRtMotionController:null");
     rtCon->setFilterLimit(false, cfg.filter_freq);
-    const double period_s = cfg.servo_period_ms / 1000.0;
-    rtCon->setServoJoint(period_s, period_s * 3.0, cfg.servoj_kp, ec);
-    if (ec) throw std::runtime_error("setServoJoint:" + ec.message());
+    const double servoj_period_s = cfg.servo_period_ms / 1000.0;
+    bool servoj_enabled = false;
+    rtCon->setServoJoint(servoj_period_s, servoj_period_s * 3.0, cfg.servoj_kp, ec);
+    if (ec) {
+      std::cerr << "WARN setServoJoint:" << ec.message()
+                << "; fallback to 1ms jointPosition resend mode" << std::endl;
+      ec.clear();
+    } else {
+      servoj_enabled = true;
+    }
     rtCon->startMove(RtControllerMode::jointPosition);
 
     std::cout << "READY" << std::endl;
@@ -545,7 +552,8 @@ int main(int argc, char **argv) {
 
     auto next_cmd = std::chrono::steady_clock::now();
     auto next_status = std::chrono::steady_clock::now();
-    const auto cmd_period = std::chrono::duration<double>(period_s);
+    const double command_period_s = servoj_enabled ? servoj_period_s : 0.001;
+    const auto cmd_period = std::chrono::duration<double>(command_period_s);
     const auto status_period = std::chrono::duration<double>(1.0 / std::max(cfg.status_hz, 0.1));
 
     while (g_running.load()) {
@@ -555,7 +563,7 @@ int main(int argc, char **argv) {
       auto snap = snapshot_state(state);
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
       auto target = stale ? last_cmd : snap.target_rad;
-      const double dt = std::max(period_s, cfg.servo_period_ms / 1000.0);
+      const double dt = std::max(command_period_s, 0.001);
       auto limited = slew_limit(target, last_cmd, cfg, dt);
       last_cmd = limited;
       {
@@ -577,7 +585,9 @@ int main(int argc, char **argv) {
     JointPosition finish(std::vector<double>(last_cmd.begin(), last_cmd.end()));
     finish.setFinished();
     rtCon->sendCommand(finish);
-    rtCon->stopServoJoint();
+    if (servoj_enabled) {
+      rtCon->stopServoJoint();
+    }
     robot.stopReceiveRobotState();
     robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
   } catch (const std::exception &e) {
