@@ -312,7 +312,6 @@ void init_gripper(xMateErProRobot &robot, const Config &cfg) {
   robot.setxPanelRS485(xPanelOpt::Vout::supply24v, true, ec);
   if (ec) {
     std::cerr << "WARN setxPanelRS485:" << ec.message() << std::endl;
-    return;
   }
   if (!cfg.gripper_rs485_enable_on_start) return;
 
