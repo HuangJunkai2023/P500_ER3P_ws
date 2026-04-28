@@ -14,6 +14,7 @@ set(EXAMPLES
     sdk_example
     move_example
     arm_bridge
+    uarm_er3pro_rt
     path_record
     rl_project
     read_robot_state
