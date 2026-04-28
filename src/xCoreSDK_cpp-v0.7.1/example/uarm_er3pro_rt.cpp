@@ -55,6 +55,8 @@ struct Config {
   double max_frame_delta_deg = 25.0;
   double filter_freq = 50.0;
   double servoj_kp = 1.0;
+  double uarm_deadband_deg = 0.8;
+  double uarm_filter_alpha = 0.15;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -106,6 +108,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--max-frame-delta-deg") cfg.max_frame_delta_deg = std::stod(need_val(arg));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
     else if (arg == "--servoj-kp") cfg.servoj_kp = std::stod(need_val(arg));
+    else if (arg == "--uarm-deadband-deg") cfg.uarm_deadband_deg = std::stod(need_val(arg));
+    else if (arg == "--uarm-filter-alpha") cfg.uarm_filter_alpha = std::stod(need_val(arg));
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -269,12 +273,11 @@ double gripper_norm_from_angle(double grip_delta_deg, const Config &cfg, double 
   return std::clamp((grip_delta_deg - cfg.gripper_close_deg) / denom, 0.0, 1.0);
 }
 
-std::array<double, 7> map_target_deg(const std::array<double, 8> &angle_deg,
-                                     const std::array<double, 8> &zero_deg,
+std::array<double, 7> map_target_deg(const std::array<double, 7> &filtered_delta_deg,
                                      const Config &cfg) {
   std::array<double, 7> target{};
   for (size_t i = 0; i < 7; ++i) {
-    const double delta = angle_deg[i] - zero_deg[i];
+    const double delta = filtered_delta_deg[i];
     target[i] = cfg.preset_joints_deg[i] + cfg.joint_sign[i] * cfg.joint_scale[i] * delta + cfg.joint_offset_deg[i];
     target[i] = std::clamp(target[i], cfg.joint_min_deg[i], cfg.joint_max_deg[i]);
   }
@@ -289,6 +292,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
 
     std::array<double, 8> zero{};
     std::array<double, 8> last{};
+    std::array<double, 7> filtered_delta{};
     for (size_t i = 0; i < 8; ++i) {
       std::ostringstream id;
       id << std::setw(3) << std::setfill('0') << i;
@@ -304,7 +308,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
       std::lock_guard<std::mutex> lock(state.mutex);
       state.zero_deg = zero;
       state.uarm_deg = last;
-      state.target_rad = deg7_to_rad(map_target_deg(last, zero, cfg));
+      state.target_rad = deg7_to_rad(map_target_deg(filtered_delta, cfg));
       state.gripper = 1.0;
       state.uarm_ready = true;
       state.last_uarm_time = now_sec();
@@ -336,7 +340,16 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
       // Match the original UArm reader behavior: a failed servo read keeps its
       // previous value, but any valid read advances the latest command frame.
       if (valid_reads > 0) {
-        auto target_deg = map_target_deg(angles, zero, cfg);
+        const double alpha = std::clamp(cfg.uarm_filter_alpha, 0.0, 1.0);
+        for (size_t i = 0; i < 7; ++i) {
+          double raw_delta = angles[i] - zero[i];
+          if (std::abs(raw_delta) < cfg.uarm_deadband_deg) {
+            raw_delta = 0.0;
+          }
+          filtered_delta[i] += alpha * (raw_delta - filtered_delta[i]);
+        }
+
+        auto target_deg = map_target_deg(filtered_delta, cfg);
         auto target_rad = deg7_to_rad(target_deg);
         const double grip_delta = angles[7] - zero[7];
         std::lock_guard<std::mutex> lock(state.mutex);
