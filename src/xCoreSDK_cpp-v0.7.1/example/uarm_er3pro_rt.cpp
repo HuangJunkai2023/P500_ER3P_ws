@@ -60,9 +60,9 @@ struct Config {
   double max_frame_delta_deg = 25.0;
   double filter_freq = 50.0;
   double servoj_kp = 1.0;
-  double uarm_deadband_deg = 0.8;
-  double uarm_step_deadband_deg = 1.2;
-  double uarm_filter_alpha = 0.15;
+  double uarm_deadband_deg = 0.05;
+  double uarm_step_deadband_deg = 0.05;
+  double uarm_filter_alpha = 0.75;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -75,7 +75,7 @@ struct Config {
   std::array<double, 7> joint_offset_deg = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   std::array<double, 7> joint_min_deg = {-170.0, -120.0, -170.0, -170.0, -170.0, -170.0, -170.0};
   std::array<double, 7> joint_max_deg = {170.0, 120.0, 170.0, 170.0, 170.0, 170.0, 170.0};
-  std::array<double, 7> max_speed_deg = {90.0, 90.0, 90.0, 120.0, 120.0, 120.0, 120.0};
+  std::array<double, 7> max_speed_deg = {360.0, 360.0, 360.0, 420.0, 420.0, 420.0, 420.0};
   double gripper_open_deg = 270.0;
   double gripper_close_deg = 0.0;
   bool enable_gripper = true;
