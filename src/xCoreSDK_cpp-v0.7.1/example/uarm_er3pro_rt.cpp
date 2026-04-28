@@ -75,7 +75,8 @@ struct Config {
   std::array<double, 7> joint_offset_deg = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   std::array<double, 7> joint_min_deg = {-170.0, -120.0, -170.0, -170.0, -170.0, -170.0, -170.0};
   std::array<double, 7> joint_max_deg = {170.0, 120.0, 170.0, 170.0, 170.0, 170.0, 170.0};
-  std::array<double, 7> max_speed_deg = {360.0, 360.0, 360.0, 420.0, 420.0, 420.0, 420.0};
+  std::array<double, 7> max_speed_deg = {120.0, 120.0, 120.0, 160.0, 160.0, 160.0, 160.0};
+  std::array<double, 7> max_accel_deg = {600.0, 600.0, 600.0, 800.0, 800.0, 800.0, 800.0};
   double gripper_open_deg = 270.0;
   double gripper_close_deg = 0.0;
   bool enable_gripper = true;
@@ -177,6 +178,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
       if (!parse_csv(need_val(arg), cfg.joint_max_deg)) throw std::runtime_error("bad --joint-max-deg");
     } else if (arg == "--max-speed-deg") {
       if (!parse_csv(need_val(arg), cfg.max_speed_deg)) throw std::runtime_error("bad --max-speed-deg");
+    } else if (arg == "--max-accel-deg") {
+      if (!parse_csv(need_val(arg), cfg.max_accel_deg)) throw std::runtime_error("bad --max-accel-deg");
     } else if (arg == "--dry-run") {
       cfg.dry_run = true;
       cfg.enable_robot = false;
@@ -501,14 +504,25 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
   }
 }
 
-std::array<double, 7> slew_limit(const std::array<double, 7> &target,
-                                 const std::array<double, 7> &last,
-                                 const Config &cfg,
-                                 double dt_s) {
+std::array<double, 7> trajectory_step(const std::array<double, 7> &target,
+                                      const std::array<double, 7> &last,
+                                      std::array<double, 7> &velocity,
+                                      const Config &cfg,
+                                      double dt_s) {
   std::array<double, 7> out{};
   for (size_t i = 0; i < 7; ++i) {
-    const double max_delta = cfg.max_speed_deg[i] * M_PI / 180.0 * dt_s;
-    out[i] = last[i] + std::clamp(target[i] - last[i], -max_delta, max_delta);
+    const double max_vel = cfg.max_speed_deg[i] * M_PI / 180.0;
+    const double max_accel = cfg.max_accel_deg[i] * M_PI / 180.0;
+    const double err = target[i] - last[i];
+    const double desired_vel = std::clamp(err / std::max(dt_s, 1e-6), -max_vel, max_vel);
+    const double max_dv = max_accel * dt_s;
+    velocity[i] += std::clamp(desired_vel - velocity[i], -max_dv, max_dv);
+    velocity[i] = std::clamp(velocity[i], -max_vel, max_vel);
+    out[i] = last[i] + velocity[i] * dt_s;
+    if ((target[i] - last[i]) * (target[i] - out[i]) <= 0.0) {
+      out[i] = target[i];
+      velocity[i] = 0.0;
+    }
   }
   return out;
 }
@@ -713,6 +727,7 @@ int main(int argc, char **argv) {
     if (std::all_of(last_cmd.begin(), last_cmd.end(), [](double v) { return std::abs(v) < 1e-12; })) {
       last_cmd = deg7_to_rad(cfg.preset_joints_deg);
     }
+    std::array<double, 7> cmd_velocity{};
 
     auto next_cmd = std::chrono::steady_clock::now();
     auto next_status = std::chrono::steady_clock::now();
@@ -731,7 +746,7 @@ int main(int argc, char **argv) {
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
       auto target = stale ? last_cmd : snap.target_rad;
       const double dt = std::max(command_period_s, 0.001);
-      auto limited = slew_limit(target, last_cmd, cfg, dt);
+      auto limited = trajectory_step(target, last_cmd, cmd_velocity, cfg, dt);
       last_cmd = limited;
       {
         std::lock_guard<std::mutex> lock(state.mutex);
