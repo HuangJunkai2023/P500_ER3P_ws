@@ -47,8 +47,8 @@ struct Config {
   std::string local_ip = "";
   std::string uarm_port = "/dev/ttyUSB0";
   int uarm_baud = 115200;
-  int uarm_timeout_us = 5000;
-  int uarm_command_delay_us = 1000;
+  int uarm_timeout_us = 30000;
+  int uarm_command_delay_us = 8000;
   double servo_period_ms = 20.0;
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
@@ -60,6 +60,7 @@ struct Config {
   bool dry_run = false;
   bool skip_preset = false;
   bool enable_robot = true;
+  double startup_uarm_fresh_timeout_s = 5.0;
   std::array<double, 7> preset_joints_deg = {0.0, 30.0, 0.0, 60.0, 0.0, 90.0, 0.0};
   std::array<double, 7> joint_sign = {1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0};
   std::array<double, 7> joint_scale = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -101,6 +102,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--servo-period-ms") cfg.servo_period_ms = std::stod(need_val(arg));
     else if (arg == "--status-hz") cfg.status_hz = std::stod(need_val(arg));
     else if (arg == "--stale-timeout") cfg.stale_timeout_s = std::stod(need_val(arg));
+    else if (arg == "--startup-uarm-fresh-timeout") cfg.startup_uarm_fresh_timeout_s = std::stod(need_val(arg));
     else if (arg == "--max-frame-delta-deg") cfg.max_frame_delta_deg = std::stod(need_val(arg));
     else if (arg == "--filter-freq") cfg.filter_freq = std::stod(need_val(arg));
     else if (arg == "--servoj-kp") cfg.servoj_kp = std::stod(need_val(arg));
@@ -311,7 +313,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
     double prev_frame_time = now_sec();
     while (g_running.load()) {
       std::array<double, 8> angles = last;
-      bool complete = true;
+      size_t valid_reads = 0;
       uint64_t errors = 0;
       for (size_t i = 0; i < 8; ++i) {
         std::ostringstream cmd;
@@ -319,20 +321,21 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
         const std::string resp = serial.command(cmd.str());
         double angle = 0.0;
         if (!pwm_to_angle(resp, angle)) {
-          complete = false;
           ++errors;
           continue;
         }
         if (std::abs(angle - last[i]) > cfg.max_frame_delta_deg) {
-          complete = false;
           ++errors;
           continue;
         }
         angles[i] = angle;
+        ++valid_reads;
       }
 
       const double t = now_sec();
-      if (complete) {
+      // Match the original UArm reader behavior: a failed servo read keeps its
+      // previous value, but any valid read advances the latest command frame.
+      if (valid_reads > 0) {
         auto target_deg = map_target_deg(angles, zero, cfg);
         auto target_rad = deg7_to_rad(target_deg);
         const double grip_delta = angles[7] - zero[7];
@@ -444,6 +447,18 @@ StateSnapshot snapshot_state(SharedState &state) {
   return snapshot;
 }
 
+bool wait_for_fresh_uarm_frame(SharedState &state, double timeout_s) {
+  const auto deadline = std::chrono::steady_clock::now() + std::chrono::duration<double>(timeout_s);
+  while (g_running.load() && std::chrono::steady_clock::now() < deadline) {
+    const auto snap = snapshot_state(state);
+    if (snap.uarm_frames > 0 && (now_sec() - snap.last_uarm_time) <= 0.20) {
+      return true;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+  }
+  return false;
+}
+
 } // namespace
 
 int main(int argc, char **argv) {
@@ -491,6 +506,13 @@ int main(int argc, char **argv) {
     }
     if (uarm_thread.joinable()) uarm_thread.join();
     return 0;
+  }
+
+  if (!wait_for_fresh_uarm_frame(state, cfg.startup_uarm_fresh_timeout_s)) {
+    std::cerr << "ERR uarm:no fresh UArm frame; check /dev/ttyUSB*, baudrate, and Zhonglin protocol timing" << std::endl;
+    g_running.store(false);
+    if (uarm_thread.joinable()) uarm_thread.join();
+    return 1;
   }
 
   xMateErProRobot robot;
