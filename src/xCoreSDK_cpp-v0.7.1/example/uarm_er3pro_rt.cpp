@@ -83,6 +83,7 @@ struct Config {
   std::array<double, 7> joint_max_deg = {170.0, 120.0, 170.0, 170.0, 170.0, 170.0, 170.0};
   std::array<double, 7> max_speed_deg = {120.0, 120.0, 120.0, 160.0, 160.0, 160.0, 160.0};
   std::array<double, 7> max_accel_deg = {600.0, 600.0, 600.0, 800.0, 800.0, 800.0, 800.0};
+  std::array<double, 7> rt_collision_thresholds = {75.0, 75.0, 60.0, 45.0, 30.0, 30.0, 20.0};
   double gripper_open_deg = 270.0;
   double gripper_close_deg = 0.0;
   bool enable_gripper = true;
@@ -191,6 +192,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
       if (!parse_csv(need_val(arg), cfg.max_speed_deg)) throw std::runtime_error("bad --max-speed-deg");
     } else if (arg == "--max-accel-deg") {
       if (!parse_csv(need_val(arg), cfg.max_accel_deg)) throw std::runtime_error("bad --max-accel-deg");
+    } else if (arg == "--rt-collision-thresholds") {
+      if (!parse_csv(need_val(arg), cfg.rt_collision_thresholds)) throw std::runtime_error("bad --rt-collision-thresholds");
     } else if (arg == "--dry-run") {
       cfg.dry_run = true;
       cfg.enable_robot = false;
@@ -784,6 +787,11 @@ int main(int argc, char **argv) {
     auto rtCon = robot.getRtMotionController().lock();
     if (!rtCon) throw std::runtime_error("getRtMotionController:null");
     rtCon->setFilterLimit(true, cfg.filter_freq);
+    rtCon->setCollisionBehaviour(cfg.rt_collision_thresholds, ec);
+    if (ec) {
+      std::cerr << "WARN setCollisionBehaviour:" << ec.message() << std::endl;
+      ec.clear();
+    }
 
     std::array<double, 7> cmd_rad = snapshot_state(state).measured_rad;
     if (std::all_of(cmd_rad.begin(), cmd_rad.end(), [](double v) { return std::abs(v) < 1e-12; })) {
