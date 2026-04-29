@@ -59,14 +59,15 @@ struct Config {
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
   double max_frame_delta_deg = 90.0;
-  double filter_freq = 50.0;
+  double filter_freq = 8.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
   double uarm_step_deadband_deg = 1.0;
   double uarm_filter_alpha = 0.2;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
-  double robot_target_filter_hz = 6.0;
+  double robot_target_filter_hz = 3.0;
+  double robot_target_deadband_deg = 0.8;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -146,6 +147,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--uarm-interp-steps") cfg.uarm_interp_steps = std::stoi(need_val(arg));
     else if (arg == "--uarm-interp-hz") cfg.uarm_interp_hz = std::stod(need_val(arg));
     else if (arg == "--robot-target-filter-hz") cfg.robot_target_filter_hz = std::stod(need_val(arg));
+    else if (arg == "--robot-target-deadband-deg") cfg.robot_target_deadband_deg = std::stod(need_val(arg));
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -780,7 +782,7 @@ int main(int argc, char **argv) {
 
     auto rtCon = robot.getRtMotionController().lock();
     if (!rtCon) throw std::runtime_error("getRtMotionController:null");
-    rtCon->setFilterLimit(false, cfg.filter_freq);
+    rtCon->setFilterLimit(true, cfg.filter_freq);
 
     std::array<double, 7> cmd_rad = snapshot_state(state).measured_rad;
     if (std::all_of(cmd_rad.begin(), cmd_rad.end(), [](double v) { return std::abs(v) < 1e-12; })) {
@@ -808,8 +810,12 @@ int main(int argc, char **argv) {
         smooth_target_rad = stale ? cmd_rad : snap.target_rad;
       } else {
         const double alpha = 1.0 - std::exp(-2.0 * M_PI * cfg.robot_target_filter_hz * 0.001);
+        const double deadband_rad = std::max(cfg.robot_target_deadband_deg, 0.0) * M_PI / 180.0;
         for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
-          smooth_target_rad[i] += alpha * (snap.target_rad[i] - smooth_target_rad[i]);
+          const double err = snap.target_rad[i] - smooth_target_rad[i];
+          if (std::abs(err) > deadband_rad) {
+            smooth_target_rad[i] += alpha * err;
+          }
         }
       }
       cmd_rad = trajectory_step(smooth_target_rad, cmd_rad, cmd_velocity, cfg, 0.001);
