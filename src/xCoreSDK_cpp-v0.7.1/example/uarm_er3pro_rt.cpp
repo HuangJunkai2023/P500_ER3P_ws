@@ -9,6 +9,7 @@
 #include <functional>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <mutex>
 #include <regex>
 #include <sstream>
@@ -52,6 +53,7 @@ struct Config {
   std::string robot_ip = "192.168.0.160";
   std::string local_ip = "";
   std::string uarm_port = "/dev/ttyUSB0";
+  std::string uarm_port_b = "";
   int uarm_baud = 115200;
   int uarm_timeout_us = 12000;
   int uarm_command_delay_us = 0;
@@ -62,12 +64,12 @@ struct Config {
   double filter_freq = 12.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
-  double uarm_step_deadband_deg = 0.5;
-  double uarm_filter_alpha = 0.45;
+  double uarm_step_deadband_deg = 0.2;
+  double uarm_filter_alpha = 1.0;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
   double robot_target_filter_hz = 0.0;
-  double robot_target_deadband_deg = 0.6;
+  double robot_target_deadband_deg = 0.2;
   double robot_interp_ms = 80.0;
   double move_speed = 100.0;
   double move_zone = 5.0;
@@ -133,6 +135,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     if (arg == "--robot-ip") cfg.robot_ip = need_val(arg);
     else if (arg == "--local-ip") cfg.local_ip = need_val(arg);
     else if (arg == "--uarm-port") cfg.uarm_port = need_val(arg);
+    else if (arg == "--uarm-port-b") cfg.uarm_port_b = need_val(arg);
     else if (arg == "--uarm-baud") cfg.uarm_baud = std::stoi(need_val(arg));
     else if (arg == "--read-timeout-us") cfg.uarm_timeout_us = std::stoi(need_val(arg));
     else if (arg == "--uarm-command-delay-us") cfg.uarm_command_delay_us = std::stoi(need_val(arg));
@@ -438,11 +441,72 @@ std::array<double, 7> map_target_deg(const std::array<double, 7> &filtered_delta
   return target;
 }
 
+std::string zhonglin_cmd(size_t servo_id, const std::string &op) {
+  std::ostringstream cmd;
+  cmd << "#" << std::setw(3) << std::setfill('0') << servo_id << op << "!";
+  return cmd.str();
+}
+
+bool read_zhonglin_angle(ZhonglinSerial &serial, size_t servo_id, double &angle) {
+  return pwm_to_angle(serial.command(zhonglin_cmd(servo_id, "PRAD")), angle);
+}
+
+void init_zhonglin_bus(ZhonglinSerial &serial) {
+  serial.command("#000PVER!");
+  serial.command("#000PCSK!");
+}
+
+void init_servo_range(ZhonglinSerial &serial,
+                      size_t begin_id,
+                      size_t end_id,
+                      std::array<double, 8> &zero,
+                      std::array<double, 8> &last) {
+  for (size_t i = begin_id; i < end_id; ++i) {
+    serial.command(zhonglin_cmd(i, "PULK"));
+    double angle = 0.0;
+    if (read_zhonglin_angle(serial, i, angle)) {
+      zero[i] = angle;
+      last[i] = angle;
+    }
+  }
+}
+
+void read_servo_range(ZhonglinSerial &serial,
+                      size_t begin_id,
+                      size_t end_id,
+                      std::array<double, 8> &angles,
+                      size_t &valid_reads,
+                      uint64_t &errors) {
+  size_t valid = 0;
+  uint64_t err = 0;
+  for (size_t i = begin_id; i < end_id; ++i) {
+    double angle = 0.0;
+    if (!read_zhonglin_angle(serial, i, angle)) {
+      ++err;
+      continue;
+    }
+    angles[i] = angle;
+    ++valid;
+  }
+  valid_reads = valid;
+  errors = err;
+}
+
 void uarm_thread_fn(const Config &cfg, SharedState &state) {
   try {
-    ZhonglinSerial serial(cfg.uarm_port, cfg.uarm_baud, cfg.uarm_timeout_us, cfg.uarm_command_delay_us);
-    serial.command("#000PVER!");
-    serial.command("#000PCSK!");
+    ZhonglinSerial serial_a(cfg.uarm_port, cfg.uarm_baud, cfg.uarm_timeout_us, cfg.uarm_command_delay_us);
+    const bool dual_serial = !cfg.uarm_port_b.empty() && cfg.uarm_port_b != cfg.uarm_port;
+    std::unique_ptr<ZhonglinSerial> serial_b;
+    if (dual_serial) {
+      serial_b = std::make_unique<ZhonglinSerial>(
+        cfg.uarm_port_b, cfg.uarm_baud, cfg.uarm_timeout_us, cfg.uarm_command_delay_us);
+      std::cerr << "INFO uarm: dual serial mode; ids 0-3 on " << cfg.uarm_port
+                << ", ids 4-7 on " << cfg.uarm_port_b << std::endl;
+    } else {
+      std::cerr << "INFO uarm: single serial mode; ids 0-7 on " << cfg.uarm_port << std::endl;
+    }
+    init_zhonglin_bus(serial_a);
+    if (dual_serial) init_zhonglin_bus(*serial_b);
 
     std::array<double, 8> zero{};
     std::array<double, 8> last{};
@@ -450,16 +514,11 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
     std::array<double, 7> filtered_delta{};
     double accepted_grip_delta = 0.0;
     double filtered_grip_delta = 0.0;
-    for (size_t i = 0; i < 8; ++i) {
-      std::ostringstream id;
-      id << std::setw(3) << std::setfill('0') << i;
-      serial.command("#" + id.str() + "PULK!");
-      const std::string resp = serial.command("#" + id.str() + "PRAD!");
-      double angle = 0.0;
-      if (pwm_to_angle(resp, angle)) {
-        zero[i] = angle;
-        last[i] = angle;
-      }
+    if (dual_serial) {
+      init_servo_range(serial_a, 0, 4, zero, last);
+      init_servo_range(*serial_b, 4, 8, zero, last);
+    } else {
+      init_servo_range(serial_a, 0, 8, zero, last);
     }
     {
       std::lock_guard<std::mutex> lock(state.mutex);
@@ -478,17 +537,21 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
       std::array<double, 8> angles = last;
       size_t valid_reads = 0;
       uint64_t errors = 0;
-      for (size_t i = 0; i < 8; ++i) {
-        std::ostringstream cmd;
-        cmd << "#" << std::setw(3) << std::setfill('0') << i << "PRAD!";
-        const std::string resp = serial.command(cmd.str());
-        double angle = 0.0;
-        if (!pwm_to_angle(resp, angle)) {
-          ++errors;
-          continue;
-        }
-        angles[i] = angle;
-        ++valid_reads;
+      if (dual_serial) {
+        size_t valid_a = 0;
+        size_t valid_b = 0;
+        uint64_t errors_a = 0;
+        uint64_t errors_b = 0;
+        std::thread thread_a(read_servo_range, std::ref(serial_a), 0, 4,
+                             std::ref(angles), std::ref(valid_a), std::ref(errors_a));
+        std::thread thread_b(read_servo_range, std::ref(*serial_b), 4, 8,
+                             std::ref(angles), std::ref(valid_b), std::ref(errors_b));
+        thread_a.join();
+        thread_b.join();
+        valid_reads = valid_a + valid_b;
+        errors = errors_a + errors_b;
+      } else {
+        read_servo_range(serial_a, 0, 8, angles, valid_reads, errors);
       }
 
       // Match the original UArm reader behavior: a failed servo read keeps its
