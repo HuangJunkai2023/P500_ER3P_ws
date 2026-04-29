@@ -66,6 +66,7 @@ struct Config {
   double uarm_filter_alpha = 0.2;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
+  double robot_target_filter_hz = 6.0;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -144,6 +145,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--uarm-filter-alpha") cfg.uarm_filter_alpha = std::stod(need_val(arg));
     else if (arg == "--uarm-interp-steps") cfg.uarm_interp_steps = std::stoi(need_val(arg));
     else if (arg == "--uarm-interp-hz") cfg.uarm_interp_hz = std::stod(need_val(arg));
+    else if (arg == "--robot-target-filter-hz") cfg.robot_target_filter_hz = std::stod(need_val(arg));
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -788,6 +790,7 @@ int main(int argc, char **argv) {
       std::lock_guard<std::mutex> lock(state.mutex);
       state.command_rad = cmd_rad;
     }
+    std::array<double, 7> smooth_target_rad = cmd_rad;
     std::array<double, 7> cmd_velocity{};
     uint64_t callback_ticks = 0;
     std::atomic_bool rt_loop_started{false};
@@ -801,8 +804,15 @@ int main(int argc, char **argv) {
       }
 
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
-      const auto &target = stale ? cmd_rad : snap.target_rad;
-      cmd_rad = trajectory_step(target, cmd_rad, cmd_velocity, cfg, 0.001);
+      if (stale || cfg.robot_target_filter_hz <= 0.0) {
+        smooth_target_rad = stale ? cmd_rad : snap.target_rad;
+      } else {
+        const double alpha = 1.0 - std::exp(-2.0 * M_PI * cfg.robot_target_filter_hz * 0.001);
+        for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
+          smooth_target_rad[i] += alpha * (snap.target_rad[i] - smooth_target_rad[i]);
+        }
+      }
+      cmd_rad = trajectory_step(smooth_target_rad, cmd_rad, cmd_velocity, cfg, 0.001);
 
       if ((++callback_ticks % 10) == 0) {
         std::lock_guard<std::mutex> lock(state.mutex);
