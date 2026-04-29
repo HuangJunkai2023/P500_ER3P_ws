@@ -6,6 +6,7 @@
 #include <cmath>
 #include <csignal>
 #include <cstring>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <mutex>
@@ -362,6 +363,7 @@ struct SharedState {
   std::array<double, 8> zero_deg{};
   std::array<double, 8> uarm_deg{};
   std::array<double, 7> target_rad{};
+  std::array<double, 7> command_rad{};
   std::array<double, 7> measured_rad{};
   std::array<double, 3> tcp_pos{};
   std::array<double, 4> tcp_quat{0.0, 0.0, 0.0, 1.0};
@@ -377,6 +379,7 @@ struct StateSnapshot {
   std::array<double, 8> zero_deg{};
   std::array<double, 8> uarm_deg{};
   std::array<double, 7> target_rad{};
+  std::array<double, 7> command_rad{};
   std::array<double, 7> measured_rad{};
   std::array<double, 3> tcp_pos{};
   std::array<double, 4> tcp_quat{0.0, 0.0, 0.0, 1.0};
@@ -437,6 +440,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
       state.zero_deg = zero;
       state.uarm_deg = last;
       state.target_rad = deg7_to_rad(map_target_deg(filtered_delta, cfg));
+      state.command_rad = state.target_rad;
       state.gripper = 1.0;
       state.uarm_ready = true;
       state.last_uarm_time = now_sec();
@@ -574,7 +578,7 @@ void print_state(const StateSnapshot &snapshot) {
   for (double v : snapshot.measured_rad) std::cout << " " << v;
   for (double v : snapshot.tcp_pos) std::cout << " " << v;
   for (double v : snapshot.tcp_quat) std::cout << " " << v;
-  for (double v : snapshot.target_rad) std::cout << " " << v;
+  for (double v : snapshot.command_rad) std::cout << " " << v;
   std::cout << " " << snapshot.gripper;
   for (double v : snapshot.uarm_deg) std::cout << " " << v;
   std::cout << " " << (1000.0 * (now_sec() - snapshot.last_uarm_time))
@@ -590,6 +594,7 @@ StateSnapshot snapshot_state(SharedState &state) {
   snapshot.zero_deg = state.zero_deg;
   snapshot.uarm_deg = state.uarm_deg;
   snapshot.target_rad = state.target_rad;
+  snapshot.command_rad = state.command_rad;
   snapshot.measured_rad = state.measured_rad;
   snapshot.tcp_pos = state.tcp_pos;
   snapshot.tcp_quat = state.tcp_quat;
@@ -633,6 +638,7 @@ int main(int argc, char **argv) {
 
   SharedState state;
   state.target_rad = deg7_to_rad(cfg.preset_joints_deg);
+  state.command_rad = state.target_rad;
   state.measured_rad = state.target_rad;
 
   std::thread uarm_thread(uarm_thread_fn, std::cref(cfg), std::ref(state));
@@ -676,6 +682,14 @@ int main(int argc, char **argv) {
     if (cfg.local_ip.empty()) robot.connectToRobot(cfg.robot_ip);
     else robot.connectToRobot(cfg.robot_ip, cfg.local_ip);
 
+    const auto info = robot.robotInfo(ec);
+    if (ec) throw std::runtime_error("robotInfo:" + ec.message());
+    std::cerr << "INFO robot:type=" << info.type << " joint_num=" << info.joint_num << std::endl;
+    if (info.joint_num != 7) {
+      throw std::runtime_error("this bridge is for 7-axis xMateER3 Pro/xMateER7 Pro; connected joint_num="
+                               + std::to_string(info.joint_num));
+    }
+
     robot.setOperateMode(OperateMode::automatic, ec);
     if (ec) throw std::runtime_error("setOperateMode:" + ec.message());
     robot.setPowerState(true, ec);
@@ -709,33 +723,54 @@ int main(int argc, char **argv) {
     auto rtCon = robot.getRtMotionController().lock();
     if (!rtCon) throw std::runtime_error("getRtMotionController:null");
     rtCon->setFilterLimit(false, cfg.filter_freq);
-    const double servoj_period_s = cfg.servo_period_ms / 1000.0;
-    bool servoj_enabled = false;
-    rtCon->setServoJoint(servoj_period_s, servoj_period_s * 3.0, cfg.servoj_kp, ec);
-    if (ec) {
-      std::cerr << "WARN setServoJoint:" << ec.message()
-                << "; fallback to 1ms jointPosition resend mode" << std::endl;
-      ec.clear();
-    } else {
-      servoj_enabled = true;
+
+    std::array<double, 7> cmd_rad = snapshot_state(state).measured_rad;
+    if (std::all_of(cmd_rad.begin(), cmd_rad.end(), [](double v) { return std::abs(v) < 1e-12; })) {
+      cmd_rad = deg7_to_rad(cfg.preset_joints_deg);
     }
+    {
+      std::lock_guard<std::mutex> lock(state.mutex);
+      state.command_rad = cmd_rad;
+    }
+    std::array<double, 7> cmd_velocity{};
+    uint64_t callback_ticks = 0;
+    std::atomic_bool rt_loop_started{false};
+
+    std::function<JointPosition()> callback = [&]() {
+      StateSnapshot snap;
+      {
+        std::lock_guard<std::mutex> lock(state.mutex);
+        snap.target_rad = state.target_rad;
+        snap.last_uarm_time = state.last_uarm_time;
+      }
+
+      const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
+      const auto &target = stale ? cmd_rad : snap.target_rad;
+      cmd_rad = trajectory_step(target, cmd_rad, cmd_velocity, cfg, 0.001);
+
+      if ((++callback_ticks % 10) == 0) {
+        std::lock_guard<std::mutex> lock(state.mutex);
+        state.command_rad = cmd_rad;
+      }
+
+      JointPosition cmd(std::vector<double>(cmd_rad.begin(), cmd_rad.end()));
+      if (!g_running.load()) {
+        cmd.setFinished();
+      }
+      return cmd;
+    };
+
+    rtCon->setControlLoop(callback);
     rtCon->startMove(RtControllerMode::jointPosition);
+    rtCon->startLoop(false);
+    rt_loop_started.store(true);
 
     std::cout << "READY" << std::endl;
 
-    auto last_cmd = snapshot_state(state).measured_rad;
-    if (std::all_of(last_cmd.begin(), last_cmd.end(), [](double v) { return std::abs(v) < 1e-12; })) {
-      last_cmd = deg7_to_rad(cfg.preset_joints_deg);
-    }
-    std::array<double, 7> cmd_velocity{};
-
-    auto next_cmd = std::chrono::steady_clock::now();
     auto next_status = std::chrono::steady_clock::now();
     auto next_gripper = std::chrono::steady_clock::now();
     int last_gripper_cmd_pos = -1000;
     double last_gripper_cmd_value = -1.0;
-    const double command_period_s = servoj_enabled ? servoj_period_s : 0.001;
-    const auto cmd_period = std::chrono::duration<double>(command_period_s);
     const auto status_period = std::chrono::duration<double>(1.0 / std::max(cfg.status_hz, 0.1));
 
     while (g_running.load()) {
@@ -744,17 +779,6 @@ int main(int argc, char **argv) {
 
       auto snap = snapshot_state(state);
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
-      auto target = stale ? last_cmd : snap.target_rad;
-      const double dt = std::max(command_period_s, 0.001);
-      auto limited = trajectory_step(target, last_cmd, cmd_velocity, cfg, dt);
-      last_cmd = limited;
-      {
-        std::lock_guard<std::mutex> lock(state.mutex);
-        state.target_rad = limited;
-      }
-      JointPosition cmd(std::vector<double>(limited.begin(), limited.end()));
-      rtCon->sendCommand(cmd);
-
       const auto now = std::chrono::steady_clock::now();
       if (cfg.enable_gripper && now >= next_gripper && !stale) {
         const int target_gripper_pos = gripper_norm_to_pos(cfg, snap.gripper);
@@ -773,16 +797,15 @@ int main(int argc, char **argv) {
         print_state(snapshot_state(state));
         next_status += std::chrono::duration_cast<std::chrono::steady_clock::duration>(status_period);
       }
-      next_cmd += std::chrono::duration_cast<std::chrono::steady_clock::duration>(cmd_period);
-      std::this_thread::sleep_until(next_cmd);
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    JointPosition finish(std::vector<double>(last_cmd.begin(), last_cmd.end()));
-    finish.setFinished();
-    rtCon->sendCommand(finish);
-    if (servoj_enabled) {
-      rtCon->stopServoJoint();
+    g_running.store(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    if (rt_loop_started.load()) {
+      rtCon->stopLoop();
     }
+    rtCon->stopMove();
     robot.stopReceiveRobotState();
     robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
   } catch (const std::exception &e) {
