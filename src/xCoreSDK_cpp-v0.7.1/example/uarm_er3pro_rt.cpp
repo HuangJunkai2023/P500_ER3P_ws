@@ -58,16 +58,18 @@ struct Config {
   double servo_period_ms = 20.0;
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
-  double max_frame_delta_deg = 25.0;
+  double max_frame_delta_deg = 90.0;
   double filter_freq = 50.0;
   double servoj_kp = 1.0;
-  double uarm_deadband_deg = 0.05;
-  double uarm_step_deadband_deg = 0.05;
-  double uarm_filter_alpha = 0.75;
+  double uarm_deadband_deg = 0.0;
+  double uarm_step_deadband_deg = 1.0;
+  double uarm_filter_alpha = 0.2;
+  int uarm_interp_steps = 5;
+  double uarm_interp_hz = 50.0;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
-  bool skip_preset = false;
+  bool skip_preset = true;
   bool enable_robot = true;
   double startup_uarm_fresh_timeout_s = 5.0;
   std::array<double, 7> preset_joints_deg = {0.0, 30.0, 0.0, 60.0, 0.0, 90.0, 0.0};
@@ -140,6 +142,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--uarm-deadband-deg") cfg.uarm_deadband_deg = std::stod(need_val(arg));
     else if (arg == "--uarm-step-deadband-deg") cfg.uarm_step_deadband_deg = std::stod(need_val(arg));
     else if (arg == "--uarm-filter-alpha") cfg.uarm_filter_alpha = std::stod(need_val(arg));
+    else if (arg == "--uarm-interp-steps") cfg.uarm_interp_steps = std::stoi(need_val(arg));
+    else if (arg == "--uarm-interp-hz") cfg.uarm_interp_hz = std::stod(need_val(arg));
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -188,6 +192,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
       cfg.enable_robot = false;
     } else if (arg == "--skip-preset") {
       cfg.skip_preset = true;
+    } else if (arg == "--use-preset") {
+      cfg.skip_preset = false;
     } else {
       return false;
     }
@@ -362,6 +368,7 @@ struct SharedState {
   std::mutex mutex;
   std::array<double, 8> zero_deg{};
   std::array<double, 8> uarm_deg{};
+  std::array<double, 7> teleop_origin_deg{};
   std::array<double, 7> target_rad{};
   std::array<double, 7> command_rad{};
   std::array<double, 7> measured_rad{};
@@ -378,6 +385,7 @@ struct SharedState {
 struct StateSnapshot {
   std::array<double, 8> zero_deg{};
   std::array<double, 8> uarm_deg{};
+  std::array<double, 7> teleop_origin_deg{};
   std::array<double, 7> target_rad{};
   std::array<double, 7> command_rad{};
   std::array<double, 7> measured_rad{};
@@ -397,6 +405,12 @@ std::array<double, 7> deg7_to_rad(const std::array<double, 7> &deg) {
   return out;
 }
 
+std::array<double, 7> rad7_to_deg(const std::array<double, 7> &rad) {
+  std::array<double, 7> out{};
+  for (size_t i = 0; i < out.size(); ++i) out[i] = rad[i] * 180.0 / M_PI;
+  return out;
+}
+
 double gripper_norm_from_angle(double grip_delta_deg, const Config &cfg, double fallback) {
   const double denom = cfg.gripper_open_deg - cfg.gripper_close_deg;
   if (std::abs(denom) < 1e-9) return fallback;
@@ -404,11 +418,12 @@ double gripper_norm_from_angle(double grip_delta_deg, const Config &cfg, double 
 }
 
 std::array<double, 7> map_target_deg(const std::array<double, 7> &filtered_delta_deg,
+                                     const std::array<double, 7> &origin_deg,
                                      const Config &cfg) {
   std::array<double, 7> target{};
   for (size_t i = 0; i < 7; ++i) {
     const double delta = filtered_delta_deg[i];
-    target[i] = cfg.preset_joints_deg[i] + cfg.joint_sign[i] * cfg.joint_scale[i] * delta + cfg.joint_offset_deg[i];
+    target[i] = origin_deg[i] + cfg.joint_sign[i] * cfg.joint_scale[i] * delta + cfg.joint_offset_deg[i];
     target[i] = std::clamp(target[i], cfg.joint_min_deg[i], cfg.joint_max_deg[i]);
   }
   return target;
@@ -424,6 +439,8 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
     std::array<double, 8> last{};
     std::array<double, 7> accepted_delta{};
     std::array<double, 7> filtered_delta{};
+    double accepted_grip_delta = 0.0;
+    double filtered_grip_delta = 0.0;
     for (size_t i = 0; i < 8; ++i) {
       std::ostringstream id;
       id << std::setw(3) << std::setfill('0') << i;
@@ -439,7 +456,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
       std::lock_guard<std::mutex> lock(state.mutex);
       state.zero_deg = zero;
       state.uarm_deg = last;
-      state.target_rad = deg7_to_rad(map_target_deg(filtered_delta, cfg));
+      state.target_rad = deg7_to_rad(map_target_deg(filtered_delta, state.teleop_origin_deg, cfg));
       state.command_rad = state.target_rad;
       state.gripper = 1.0;
       state.uarm_ready = true;
@@ -460,41 +477,63 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
           ++errors;
           continue;
         }
-        if (std::abs(angle - last[i]) > cfg.max_frame_delta_deg) {
-          ++errors;
-          continue;
-        }
         angles[i] = angle;
         ++valid_reads;
       }
 
-      const double t = now_sec();
       // Match the original UArm reader behavior: a failed servo read keeps its
       // previous value, but any valid read advances the latest command frame.
       if (valid_reads > 0) {
-        const double alpha = std::clamp(cfg.uarm_filter_alpha, 0.0, 1.0);
         for (size_t i = 0; i < 7; ++i) {
           double raw_delta = angles[i] - zero[i];
           if (std::abs(raw_delta) < cfg.uarm_deadband_deg) {
             raw_delta = 0.0;
           }
-          if (std::abs(raw_delta - accepted_delta[i]) >= cfg.uarm_step_deadband_deg) {
+          if (std::abs(raw_delta - accepted_delta[i]) > cfg.max_frame_delta_deg) {
+            ++errors;
+            continue;
+          } else if (std::abs(raw_delta - accepted_delta[i]) >= cfg.uarm_step_deadband_deg) {
             accepted_delta[i] = raw_delta;
           }
-          filtered_delta[i] += alpha * (accepted_delta[i] - filtered_delta[i]);
         }
 
-        auto target_deg = map_target_deg(filtered_delta, cfg);
-        auto target_rad = deg7_to_rad(target_deg);
-        const double grip_delta = angles[7] - zero[7];
-        std::lock_guard<std::mutex> lock(state.mutex);
-        state.uarm_deg = angles;
-        state.target_rad = target_rad;
-        state.gripper = gripper_norm_from_angle(grip_delta, cfg, state.gripper);
-        state.uarm_frame_period_ms = 1000.0 * (t - prev_frame_time);
-        state.last_uarm_time = t;
-        state.uarm_frames++;
-        prev_frame_time = t;
+        const double raw_grip_delta = angles[7] - zero[7];
+        if (std::abs(raw_grip_delta - accepted_grip_delta) <= cfg.max_frame_delta_deg &&
+            std::abs(raw_grip_delta - accepted_grip_delta) >= cfg.uarm_step_deadband_deg) {
+          accepted_grip_delta = raw_grip_delta;
+        }
+
+        const double alpha = std::clamp(cfg.uarm_filter_alpha, 0.0, 1.0);
+        const int interp_steps = std::max(cfg.uarm_interp_steps, 1);
+        const double interp_hz = std::max(cfg.uarm_interp_hz, 1.0);
+        const auto interp_period = std::chrono::duration<double>(1.0 / interp_hz);
+        for (int step = 0; step < interp_steps && g_running.load(); ++step) {
+          for (size_t i = 0; i < 7; ++i) {
+            filtered_delta[i] += alpha * (accepted_delta[i] - filtered_delta[i]);
+          }
+          filtered_grip_delta += alpha * (accepted_grip_delta - filtered_grip_delta);
+
+          std::array<double, 7> origin_deg{};
+          {
+            std::lock_guard<std::mutex> lock(state.mutex);
+            origin_deg = state.teleop_origin_deg;
+          }
+          auto target_deg = map_target_deg(filtered_delta, origin_deg, cfg);
+          auto target_rad = deg7_to_rad(target_deg);
+          const double t = now_sec();
+          {
+            std::lock_guard<std::mutex> lock(state.mutex);
+            state.uarm_deg = angles;
+            state.target_rad = target_rad;
+            state.gripper = gripper_norm_from_angle(filtered_grip_delta, cfg, state.gripper);
+            state.uarm_frame_period_ms = 1000.0 * (t - prev_frame_time);
+            state.last_uarm_time = t;
+            state.uarm_frames++;
+          }
+          prev_frame_time = t;
+          std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::steady_clock::duration>(interp_period));
+        }
+
         last = angles;
       }
       if (errors > 0) {
@@ -593,6 +632,7 @@ StateSnapshot snapshot_state(SharedState &state) {
   StateSnapshot snapshot;
   snapshot.zero_deg = state.zero_deg;
   snapshot.uarm_deg = state.uarm_deg;
+  snapshot.teleop_origin_deg = state.teleop_origin_deg;
   snapshot.target_rad = state.target_rad;
   snapshot.command_rad = state.command_rad;
   snapshot.measured_rad = state.measured_rad;
@@ -637,6 +677,7 @@ int main(int argc, char **argv) {
   }
 
   SharedState state;
+  state.teleop_origin_deg = cfg.preset_joints_deg;
   state.target_rad = deg7_to_rad(cfg.preset_joints_deg);
   state.command_rad = state.target_rad;
   state.measured_rad = state.target_rad;
@@ -704,6 +745,21 @@ int main(int argc, char **argv) {
       robot.executeCommand({move}, ec);
       if (ec) throw std::runtime_error("execute preset:" + ec.message());
       if (!wait_robot_idle(robot, std::chrono::seconds(30))) throw std::runtime_error("preset timeout");
+      std::lock_guard<std::mutex> lock(state.mutex);
+      state.teleop_origin_deg = cfg.preset_joints_deg;
+      state.target_rad = preset_rad;
+      state.command_rad = preset_rad;
+      state.measured_rad = preset_rad;
+    } else {
+      const auto current_rad = robot.jointPos(ec);
+      if (ec) throw std::runtime_error("jointPos startup:" + ec.message());
+      std::lock_guard<std::mutex> lock(state.mutex);
+      state.teleop_origin_deg = rad7_to_deg(current_rad);
+      state.target_rad = current_rad;
+      state.command_rad = current_rad;
+      state.measured_rad = current_rad;
+      std::cerr << "INFO startup: using current ER3Pro joints as UArm teleop origin; pass --use-preset to move to preset first"
+                << std::endl;
     }
 
     robot.setRtNetworkTolerance(40.0, ec);
@@ -726,7 +782,7 @@ int main(int argc, char **argv) {
 
     std::array<double, 7> cmd_rad = snapshot_state(state).measured_rad;
     if (std::all_of(cmd_rad.begin(), cmd_rad.end(), [](double v) { return std::abs(v) < 1e-12; })) {
-      cmd_rad = deg7_to_rad(cfg.preset_joints_deg);
+      cmd_rad = snapshot_state(state).target_rad;
     }
     {
       std::lock_guard<std::mutex> lock(state.mutex);
@@ -803,9 +859,12 @@ int main(int argc, char **argv) {
     g_running.store(false);
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
     if (rt_loop_started.load()) {
-      rtCon->stopLoop();
+      try {
+        rtCon->stopLoop();
+      } catch (const std::exception &e) {
+        std::cerr << "WARN stopLoop:" << e.what() << std::endl;
+      }
     }
-    rtCon->stopMove();
     robot.stopReceiveRobotState();
     robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
   } catch (const std::exception &e) {
