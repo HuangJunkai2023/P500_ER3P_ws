@@ -62,12 +62,12 @@ struct Config {
   double filter_freq = 12.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
-  double uarm_step_deadband_deg = 0.2;
-  double uarm_filter_alpha = 1.0;
+  double uarm_step_deadband_deg = 0.5;
+  double uarm_filter_alpha = 0.45;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
   double robot_target_filter_hz = 0.0;
-  double robot_target_deadband_deg = 0.2;
+  double robot_target_deadband_deg = 0.6;
   double robot_interp_ms = 80.0;
   double move_speed = 100.0;
   double move_zone = 5.0;
