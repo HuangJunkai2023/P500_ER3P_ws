@@ -59,15 +59,16 @@ struct Config {
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
   double max_frame_delta_deg = 90.0;
-  double filter_freq = 8.0;
+  double filter_freq = 12.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
   double uarm_step_deadband_deg = 1.0;
   double uarm_filter_alpha = 0.2;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
-  double robot_target_filter_hz = 3.0;
-  double robot_target_deadband_deg = 0.8;
+  double robot_target_filter_hz = 0.0;
+  double robot_target_deadband_deg = 0.2;
+  double robot_interp_ms = 80.0;
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -148,6 +149,7 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--uarm-interp-hz") cfg.uarm_interp_hz = std::stod(need_val(arg));
     else if (arg == "--robot-target-filter-hz") cfg.robot_target_filter_hz = std::stod(need_val(arg));
     else if (arg == "--robot-target-deadband-deg") cfg.robot_target_deadband_deg = std::stod(need_val(arg));
+    else if (arg == "--robot-interp-ms") cfg.robot_interp_ms = std::stod(need_val(arg));
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -793,6 +795,9 @@ int main(int argc, char **argv) {
       state.command_rad = cmd_rad;
     }
     std::array<double, 7> smooth_target_rad = cmd_rad;
+    std::array<double, 7> interp_start_rad = cmd_rad;
+    std::array<double, 7> interp_goal_rad = cmd_rad;
+    double interp_elapsed_s = 0.0;
     std::array<double, 7> cmd_velocity{};
     uint64_t callback_ticks = 0;
     std::atomic_bool rt_loop_started{false};
@@ -806,15 +811,35 @@ int main(int argc, char **argv) {
       }
 
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
-      if (stale || cfg.robot_target_filter_hz <= 0.0) {
-        smooth_target_rad = stale ? cmd_rad : snap.target_rad;
+      const double deadband_rad = std::max(cfg.robot_target_deadband_deg, 0.0) * M_PI / 180.0;
+      const double interp_duration_s = std::max(cfg.robot_interp_ms, 1.0) / 1000.0;
+      if (stale) {
+        smooth_target_rad = cmd_rad;
+        interp_start_rad = cmd_rad;
+        interp_goal_rad = cmd_rad;
+        interp_elapsed_s = interp_duration_s;
       } else {
-        const double alpha = 1.0 - std::exp(-2.0 * M_PI * cfg.robot_target_filter_hz * 0.001);
-        const double deadband_rad = std::max(cfg.robot_target_deadband_deg, 0.0) * M_PI / 180.0;
+        double max_goal_delta = 0.0;
+        for (size_t i = 0; i < interp_goal_rad.size(); ++i) {
+          max_goal_delta = std::max(max_goal_delta, std::abs(snap.target_rad[i] - interp_goal_rad[i]));
+        }
+        if (max_goal_delta > deadband_rad) {
+          interp_start_rad = smooth_target_rad;
+          interp_goal_rad = snap.target_rad;
+          interp_elapsed_s = 0.0;
+        }
+
+        interp_elapsed_s = std::min(interp_elapsed_s + 0.001, interp_duration_s);
+        const double u = std::clamp(interp_elapsed_s / interp_duration_s, 0.0, 1.0);
+        const double s = u * u * (3.0 - 2.0 * u);
         for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
-          const double err = snap.target_rad[i] - smooth_target_rad[i];
-          if (std::abs(err) > deadband_rad) {
-            smooth_target_rad[i] += alpha * err;
+          smooth_target_rad[i] = interp_start_rad[i] + s * (interp_goal_rad[i] - interp_start_rad[i]);
+        }
+
+        if (cfg.robot_target_filter_hz > 0.0) {
+          const double alpha = 1.0 - std::exp(-2.0 * M_PI * cfg.robot_target_filter_hz * 0.001);
+          for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
+            smooth_target_rad[i] += alpha * (interp_goal_rad[i] - smooth_target_rad[i]);
           }
         }
       }
