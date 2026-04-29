@@ -53,8 +53,8 @@ struct Config {
   std::string local_ip = "";
   std::string uarm_port = "/dev/ttyUSB0";
   int uarm_baud = 115200;
-  int uarm_timeout_us = 30000;
-  int uarm_command_delay_us = 8000;
+  int uarm_timeout_us = 12000;
+  int uarm_command_delay_us = 0;
   double servo_period_ms = 20.0;
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
@@ -62,8 +62,8 @@ struct Config {
   double filter_freq = 12.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
-  double uarm_step_deadband_deg = 1.0;
-  double uarm_filter_alpha = 0.2;
+  double uarm_step_deadband_deg = 0.2;
+  double uarm_filter_alpha = 1.0;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
   double robot_target_filter_hz = 0.0;
@@ -471,6 +471,7 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
 
     double prev_frame_time = now_sec();
     while (g_running.load()) {
+      const double cycle_start = now_sec();
       std::array<double, 8> angles = last;
       size_t valid_reads = 0;
       uint64_t errors = 0;
@@ -510,41 +511,39 @@ void uarm_thread_fn(const Config &cfg, SharedState &state) {
         }
 
         const double alpha = std::clamp(cfg.uarm_filter_alpha, 0.0, 1.0);
-        const int interp_steps = std::max(cfg.uarm_interp_steps, 1);
-        const double interp_hz = std::max(cfg.uarm_interp_hz, 1.0);
-        const auto interp_period = std::chrono::duration<double>(1.0 / interp_hz);
-        for (int step = 0; step < interp_steps && g_running.load(); ++step) {
-          for (size_t i = 0; i < 7; ++i) {
-            filtered_delta[i] += alpha * (accepted_delta[i] - filtered_delta[i]);
-          }
-          filtered_grip_delta += alpha * (accepted_grip_delta - filtered_grip_delta);
-
-          std::array<double, 7> origin_deg{};
-          {
-            std::lock_guard<std::mutex> lock(state.mutex);
-            origin_deg = state.teleop_origin_deg;
-          }
-          auto target_deg = map_target_deg(filtered_delta, origin_deg, cfg);
-          auto target_rad = deg7_to_rad(target_deg);
-          const double t = now_sec();
-          {
-            std::lock_guard<std::mutex> lock(state.mutex);
-            state.uarm_deg = angles;
-            state.target_rad = target_rad;
-            state.gripper = gripper_norm_from_angle(filtered_grip_delta, cfg, state.gripper);
-            state.uarm_frame_period_ms = 1000.0 * (t - prev_frame_time);
-            state.last_uarm_time = t;
-            state.uarm_frames++;
-          }
-          prev_frame_time = t;
-          std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::steady_clock::duration>(interp_period));
+        for (size_t i = 0; i < 7; ++i) {
+          filtered_delta[i] += alpha * (accepted_delta[i] - filtered_delta[i]);
         }
+        filtered_grip_delta += alpha * (accepted_grip_delta - filtered_grip_delta);
+
+        std::array<double, 7> origin_deg{};
+        {
+          std::lock_guard<std::mutex> lock(state.mutex);
+          origin_deg = state.teleop_origin_deg;
+        }
+        auto target_deg = map_target_deg(filtered_delta, origin_deg, cfg);
+        auto target_rad = deg7_to_rad(target_deg);
+        const double t = now_sec();
+        {
+          std::lock_guard<std::mutex> lock(state.mutex);
+          state.uarm_deg = angles;
+          state.target_rad = target_rad;
+          state.gripper = gripper_norm_from_angle(filtered_grip_delta, cfg, state.gripper);
+          state.uarm_frame_period_ms = 1000.0 * (t - prev_frame_time);
+          state.last_uarm_time = t;
+          state.uarm_frames++;
+        }
+        prev_frame_time = t;
 
         last = angles;
       }
       if (errors > 0) {
         std::lock_guard<std::mutex> lock(state.mutex);
         state.serial_errors += errors;
+      }
+      const double cycle_ms = 1000.0 * (now_sec() - cycle_start);
+      if (cycle_ms < 1.0) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
     }
   } catch (const std::exception &e) {
