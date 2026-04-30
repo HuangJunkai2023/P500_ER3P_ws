@@ -93,8 +93,8 @@ struct Config {
   std::array<double, 7> max_speed_deg = {120.0, 120.0, 120.0, 160.0, 160.0, 160.0, 160.0};
   std::array<double, 7> max_accel_deg = {600.0, 600.0, 600.0, 800.0, 800.0, 800.0, 800.0};
   std::array<double, 7> rt_collision_thresholds = {75.0, 75.0, 60.0, 45.0, 30.0, 30.0, 20.0};
-  double gripper_open_deg = 270.0;
-  double gripper_close_deg = 0.0;
+  double gripper_open_deg = 0.0;
+  double gripper_close_deg = 270.0;
   bool enable_gripper = true;
   GripperBackend gripper_backend = GripperBackend::Rs485Epg;
   double gripper_threshold = 0.5;
