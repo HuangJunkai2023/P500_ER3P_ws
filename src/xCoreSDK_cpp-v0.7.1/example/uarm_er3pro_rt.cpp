@@ -66,14 +66,14 @@ struct Config {
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
   double max_frame_delta_deg = 90.0;
-  double filter_freq = 8.0;
+  double filter_freq = 6.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
   double uarm_step_deadband_deg = 0.0;
-  double uarm_filter_alpha = 0.35;
+  double uarm_filter_alpha = 0.25;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
-  double robot_target_filter_hz = 6.0;
+  double robot_target_filter_hz = 4.0;
   double robot_target_deadband_deg = 0.0;
   double robot_interp_ms = 120.0;
   RtControlMode rt_control_mode = RtControlMode::JointPosition;
