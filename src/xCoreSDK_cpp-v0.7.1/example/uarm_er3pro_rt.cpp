@@ -39,6 +39,11 @@ enum class GripperBackend {
   Rs485Epg,
 };
 
+enum class RtControlMode {
+  JointPosition,
+  JointImpedance,
+};
+
 void signal_handler(int) {
   g_running.store(false);
 }
@@ -71,6 +76,8 @@ struct Config {
   double robot_target_filter_hz = 0.0;
   double robot_target_deadband_deg = 0.2;
   double robot_interp_ms = 80.0;
+  RtControlMode rt_control_mode = RtControlMode::JointPosition;
+  std::array<double, 7> joint_impedance = {500.0, 500.0, 500.0, 500.0, 50.0, 50.0, 50.0};
   double move_speed = 100.0;
   double move_zone = 5.0;
   bool dry_run = false;
@@ -154,6 +161,12 @@ bool parse_args(int argc, char **argv, Config &cfg) {
     else if (arg == "--robot-target-filter-hz") cfg.robot_target_filter_hz = std::stod(need_val(arg));
     else if (arg == "--robot-target-deadband-deg") cfg.robot_target_deadband_deg = std::stod(need_val(arg));
     else if (arg == "--robot-interp-ms") cfg.robot_interp_ms = std::stod(need_val(arg));
+    else if (arg == "--rt-control-mode") {
+      const auto mode = need_val(arg);
+      if (mode == "joint_position") cfg.rt_control_mode = RtControlMode::JointPosition;
+      else if (mode == "joint_impedance") cfg.rt_control_mode = RtControlMode::JointImpedance;
+      else throw std::runtime_error("unsupported --rt-control-mode: " + mode);
+    }
     else if (arg == "--speed") cfg.move_speed = std::stod(need_val(arg));
     else if (arg == "--zone") cfg.move_zone = std::stod(need_val(arg));
     else if (arg == "--gripper-open-deg") cfg.gripper_open_deg = std::stod(need_val(arg));
@@ -195,6 +208,8 @@ bool parse_args(int argc, char **argv, Config &cfg) {
       if (!parse_csv(need_val(arg), cfg.max_speed_deg)) throw std::runtime_error("bad --max-speed-deg");
     } else if (arg == "--max-accel-deg") {
       if (!parse_csv(need_val(arg), cfg.max_accel_deg)) throw std::runtime_error("bad --max-accel-deg");
+    } else if (arg == "--joint-impedance") {
+      if (!parse_csv(need_val(arg), cfg.joint_impedance)) throw std::runtime_error("bad --joint-impedance");
     } else if (arg == "--rt-collision-thresholds") {
       if (!parse_csv(need_val(arg), cfg.rt_collision_thresholds)) throw std::runtime_error("bad --rt-collision-thresholds");
     } else if (arg == "--dry-run") {
@@ -850,6 +865,10 @@ int main(int argc, char **argv) {
     auto rtCon = robot.getRtMotionController().lock();
     if (!rtCon) throw std::runtime_error("getRtMotionController:null");
     rtCon->setFilterLimit(true, cfg.filter_freq);
+    if (cfg.rt_control_mode == RtControlMode::JointImpedance) {
+      rtCon->setJointImpedance(cfg.joint_impedance, ec);
+      if (ec) throw std::runtime_error("setJointImpedance:" + ec.message());
+    }
     rtCon->setCollisionBehaviour(cfg.rt_collision_thresholds, ec);
     if (ec) {
       std::cerr << "WARN setCollisionBehaviour:" << ec.message() << std::endl;
@@ -928,7 +947,9 @@ int main(int argc, char **argv) {
     };
 
     rtCon->setControlLoop(callback);
-    rtCon->startMove(RtControllerMode::jointPosition);
+    rtCon->startMove(cfg.rt_control_mode == RtControlMode::JointImpedance
+                     ? RtControllerMode::jointImpedance
+                     : RtControllerMode::jointPosition);
     rtCon->startLoop(false);
     rt_loop_started.store(true);
 
