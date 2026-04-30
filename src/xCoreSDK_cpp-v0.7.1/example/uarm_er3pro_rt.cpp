@@ -66,16 +66,16 @@ struct Config {
   double status_hz = 10.0;
   double stale_timeout_s = 0.30;
   double max_frame_delta_deg = 90.0;
-  double filter_freq = 12.0;
+  double filter_freq = 8.0;
   double servoj_kp = 1.0;
   double uarm_deadband_deg = 0.0;
-  double uarm_step_deadband_deg = 0.2;
-  double uarm_filter_alpha = 1.0;
+  double uarm_step_deadband_deg = 0.0;
+  double uarm_filter_alpha = 0.35;
   int uarm_interp_steps = 5;
   double uarm_interp_hz = 50.0;
-  double robot_target_filter_hz = 0.0;
-  double robot_target_deadband_deg = 0.2;
-  double robot_interp_ms = 80.0;
+  double robot_target_filter_hz = 6.0;
+  double robot_target_deadband_deg = 0.0;
+  double robot_interp_ms = 120.0;
   RtControlMode rt_control_mode = RtControlMode::JointPosition;
   std::array<double, 7> joint_impedance = {500.0, 500.0, 500.0, 500.0, 50.0, 50.0, 50.0};
   double move_speed = 100.0;
@@ -884,9 +884,7 @@ int main(int argc, char **argv) {
       state.command_rad = cmd_rad;
     }
     std::array<double, 7> smooth_target_rad = cmd_rad;
-    std::array<double, 7> interp_start_rad = cmd_rad;
-    std::array<double, 7> interp_goal_rad = cmd_rad;
-    double interp_elapsed_s = 0.0;
+    std::array<double, 7> filtered_goal_rad = cmd_rad;
     std::array<double, 7> cmd_velocity{};
     uint64_t callback_ticks = 0;
     std::atomic_bool rt_loop_started{false};
@@ -901,35 +899,24 @@ int main(int argc, char **argv) {
 
       const bool stale = (now_sec() - snap.last_uarm_time) > cfg.stale_timeout_s;
       const double deadband_rad = std::max(cfg.robot_target_deadband_deg, 0.0) * M_PI / 180.0;
-      const double interp_duration_s = std::max(cfg.robot_interp_ms, 1.0) / 1000.0;
       if (stale) {
         smooth_target_rad = cmd_rad;
-        interp_start_rad = cmd_rad;
-        interp_goal_rad = cmd_rad;
-        interp_elapsed_s = interp_duration_s;
+        filtered_goal_rad = cmd_rad;
       } else {
         double max_goal_delta = 0.0;
-        for (size_t i = 0; i < interp_goal_rad.size(); ++i) {
-          max_goal_delta = std::max(max_goal_delta, std::abs(snap.target_rad[i] - interp_goal_rad[i]));
+        for (size_t i = 0; i < filtered_goal_rad.size(); ++i) {
+          max_goal_delta = std::max(max_goal_delta, std::abs(snap.target_rad[i] - filtered_goal_rad[i]));
         }
         if (max_goal_delta > deadband_rad) {
-          interp_start_rad = smooth_target_rad;
-          interp_goal_rad = snap.target_rad;
-          interp_elapsed_s = 0.0;
+          filtered_goal_rad = snap.target_rad;
         }
 
-        interp_elapsed_s = std::min(interp_elapsed_s + 0.001, interp_duration_s);
-        const double u = std::clamp(interp_elapsed_s / interp_duration_s, 0.0, 1.0);
-        const double s = u * u * (3.0 - 2.0 * u);
+        const double filter_hz = cfg.robot_target_filter_hz > 0.0
+          ? cfg.robot_target_filter_hz
+          : 1000.0 / std::max(cfg.robot_interp_ms, 1.0);
+        const double alpha = 1.0 - std::exp(-2.0 * M_PI * filter_hz * 0.001);
         for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
-          smooth_target_rad[i] = interp_start_rad[i] + s * (interp_goal_rad[i] - interp_start_rad[i]);
-        }
-
-        if (cfg.robot_target_filter_hz > 0.0) {
-          const double alpha = 1.0 - std::exp(-2.0 * M_PI * cfg.robot_target_filter_hz * 0.001);
-          for (size_t i = 0; i < smooth_target_rad.size(); ++i) {
-            smooth_target_rad[i] += alpha * (interp_goal_rad[i] - smooth_target_rad[i]);
-          }
+          smooth_target_rad[i] += alpha * (filtered_goal_rad[i] - smooth_target_rad[i]);
         }
       }
       cmd_rad = trajectory_step(smooth_target_rad, cmd_rad, cmd_velocity, cfg, 0.001);
