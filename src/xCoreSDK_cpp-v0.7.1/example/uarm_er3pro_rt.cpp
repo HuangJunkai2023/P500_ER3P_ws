@@ -643,7 +643,8 @@ std::array<double, 7> trajectory_step(const std::array<double, 7> &target,
     const double max_vel = cfg.max_speed_deg[i] * M_PI / 180.0;
     const double max_accel = cfg.max_accel_deg[i] * M_PI / 180.0;
     const double err = target[i] - last[i];
-    const double desired_vel = std::clamp(err / std::max(dt_s, 1e-6), -max_vel, max_vel);
+    const double tracking_tau_s = 0.04;
+    const double desired_vel = std::clamp(err / tracking_tau_s, -max_vel, max_vel);
     const double max_dv = max_accel * dt_s;
     velocity[i] += std::clamp(desired_vel - velocity[i], -max_dv, max_dv);
     velocity[i] = std::clamp(velocity[i], -max_vel, max_vel);
