@@ -987,8 +987,13 @@ int main(int argc, char **argv) {
     }
     robot.stopReceiveRobotState();
     robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
+    robot.setPowerState(false, ec);
   } catch (const std::exception &e) {
     std::cerr << "ERR robot:" << e.what() << std::endl;
+    try {
+      robot.setPowerState(false, ec);
+    } catch (...) {
+    }
     g_running.store(false);
     if (uarm_thread.joinable()) uarm_thread.join();
     return 1;
