@@ -336,10 +336,18 @@ std::array<double, 16> transform_to_array(const Eigen::Transform<double, 3, Eige
   return tf_array;
 }
 
+void drain_robot_state(xMateErProRobot &robot) {
+  while (robot.updateRobotState(std::chrono::steady_clock::duration::zero())) {
+  }
+}
+
 bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture) {
   try {
+    drain_robot_state(robot);
     std::array<double, 16> measured{};
-    robot.getStateData(RtSupportedFields::tcpPose_m, measured);
+    if (robot.getStateData(RtSupportedFields::tcpPose_m, measured) != 0) {
+      return false;
+    }
     Utils::transArrayToPosture(measured, posture);
     return true;
   } catch (...) {
@@ -349,7 +357,10 @@ bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture
 
 bool read_current_pose_matrix(xMateErProRobot &robot, std::array<double, 16> &pose) {
   try {
-    robot.getStateData(RtSupportedFields::tcpPose_m, pose);
+    drain_robot_state(robot);
+    if (robot.getStateData(RtSupportedFields::tcpPose_m, pose) != 0) {
+      return false;
+    }
     return true;
   } catch (...) {
     return false;
@@ -358,7 +369,10 @@ bool read_current_pose_matrix(xMateErProRobot &robot, std::array<double, 16> &po
 
 bool read_current_joints(xMateErProRobot &robot, std::array<double, 7> &joints) {
   try {
-    robot.getStateData(RtSupportedFields::jointPos_m, joints);
+    drain_robot_state(robot);
+    if (robot.getStateData(RtSupportedFields::jointPos_m, joints) != 0) {
+      return false;
+    }
     return true;
   } catch (...) {
     return false;
