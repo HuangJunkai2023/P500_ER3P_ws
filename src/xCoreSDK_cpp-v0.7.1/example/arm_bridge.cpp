@@ -473,13 +473,13 @@ int main(int argc, char **argv) {
   std::atomic<bool> rt_loop_running(false);
   std::array<double, 6> current_posture{};
   std::array<double, 16> target_flange_pose = preset_tf_arr;
-  if (!read_current_pose_matrix(robot, target_flange_pose)) {
-    std::array<double, 7> joints{};
-    if (read_current_joints(robot, joints)) {
-      target_flange_pose = model.getCartPose(joints);
-    }
+  std::array<double, 7> init_joints{};
+  if (read_current_joints(robot, init_joints)) {
+    target_flange_pose = model.getCartPose(init_joints);
   }
   Eigen::Transform<double, 3, Eigen::Isometry> command_flange_tf = trans_array_to_transform(target_flange_pose);
+  Eigen::Vector3d command_pos_vel = Eigen::Vector3d::Zero();
+  double command_rot_speed = 0.0;
   std::mutex state_mutex;
   std::mutex target_mutex;
   std::chrono::steady_clock::time_point last_exec_tp = std::chrono::steady_clock::now();
@@ -516,13 +516,35 @@ int main(int argc, char **argv) {
 
       const auto target_tf = trans_array_to_transform(target_flange_pose);
 
-      Eigen::Vector3d delta_pos = target_tf.translation() - command_flange_tf.translation();
+      const Eigen::Vector3d delta_pos = target_tf.translation() - command_flange_tf.translation();
       const double delta_norm = delta_pos.norm();
-      const double max_pos_step = std::max(0.0, cfg.max_pos_speed) * dt;
-      if (delta_norm > max_pos_step && delta_norm > 1e-12) {
-        delta_pos *= max_pos_step / delta_norm;
+      if (delta_norm <= 1e-9) {
+        command_flange_tf.translation() = target_tf.translation();
+        command_pos_vel.setZero();
+      } else {
+        Eigen::Vector3d desired_vel = delta_pos / dt;
+        const double desired_speed = desired_vel.norm();
+        const double max_pos_speed = std::max(0.0, cfg.max_pos_speed);
+        if (desired_speed > max_pos_speed && desired_speed > 1e-12) {
+          desired_vel *= max_pos_speed / desired_speed;
+        }
+
+        Eigen::Vector3d dv = desired_vel - command_pos_vel;
+        const double dv_norm = dv.norm();
+        const double max_dv = std::max(0.0, cfg.max_pos_accel) * dt;
+        if (dv_norm > max_dv && dv_norm > 1e-12) {
+          dv *= max_dv / dv_norm;
+        }
+        command_pos_vel += dv;
+
+        const Eigen::Vector3d step = command_pos_vel * dt;
+        if (step.norm() >= delta_norm && step.dot(delta_pos) > 0.0) {
+          command_flange_tf.translation() = target_tf.translation();
+          command_pos_vel.setZero();
+        } else {
+          command_flange_tf.translation() += step;
+        }
       }
-      command_flange_tf.translation() += delta_pos;
 
       Eigen::Quaterniond q_cmd(command_flange_tf.linear());
       Eigen::Quaterniond q_target(target_tf.linear());
@@ -533,13 +555,28 @@ int main(int argc, char **argv) {
       }
       const Eigen::AngleAxisd delta_rot(q_cmd.inverse() * q_target);
       const double rot_angle = std::abs(delta_rot.angle());
-      const double max_rot_step = std::max(0.0, cfg.max_rot_speed) * dt;
-      double rot_ratio = 1.0;
-      if (rot_angle > max_rot_step && rot_angle > 1e-12) {
-        rot_ratio = max_rot_step / rot_angle;
+      if (rot_angle <= 1e-9) {
+        command_flange_tf.linear() = q_target.normalized().toRotationMatrix();
+        command_rot_speed = 0.0;
+      } else {
+        const double desired_rot_speed = std::min(std::max(0.0, cfg.max_rot_speed), rot_angle / dt);
+        double drot_speed = desired_rot_speed - command_rot_speed;
+        const double max_drot_speed = std::max(0.0, cfg.max_rot_accel) * dt;
+        if (std::abs(drot_speed) > max_drot_speed) {
+          drot_speed = std::copysign(max_drot_speed, drot_speed);
+        }
+        command_rot_speed = std::max(0.0, command_rot_speed + drot_speed);
+
+        const double rot_step = std::min(command_rot_speed * dt, rot_angle);
+        if (rot_step >= rot_angle) {
+          command_flange_tf.linear() = q_target.normalized().toRotationMatrix();
+          command_rot_speed = 0.0;
+        } else {
+          const double rot_ratio = rot_step / rot_angle;
+          const Eigen::Quaterniond q_next = q_cmd.slerp(rot_ratio, q_target);
+          command_flange_tf.linear() = q_next.normalized().toRotationMatrix();
+        }
       }
-      const Eigen::Quaterniond q_next = q_cmd.slerp(rot_ratio, q_target);
-      command_flange_tf.linear() = q_next.normalized().toRotationMatrix();
 
       output.pos = transform_to_array(command_flange_tf);
     }
@@ -551,6 +588,8 @@ int main(int argc, char **argv) {
     target_flange_pose = pose;
     if (reset_command) {
       command_flange_tf = trans_array_to_transform(pose);
+      command_pos_vel.setZero();
+      command_rot_speed = 0.0;
       last_callback_tp = std::chrono::steady_clock::now();
     }
   };
@@ -573,6 +612,9 @@ int main(int argc, char **argv) {
   };
 
   auto start_rt_loop = [&]() -> bool {
+    if (rt_loop_running.load()) {
+      stop_rt_loop();
+    }
     try {
       rtCon->setControlLoop(callback);
       rtCon->startMove(RtControllerMode::cartesianImpedance);
@@ -596,16 +638,12 @@ int main(int argc, char **argv) {
   std::cout << "READY" << std::endl;
 
   auto restart_rt_from_current = [&]() -> bool {
-    std::array<double, 16> current_pose{};
-    if (!read_current_pose_matrix(robot, current_pose)) {
-      std::array<double, 7> joints{};
-      if (!read_current_joints(robot, joints)) {
-        print_err("read_current_pose");
-        return false;
-      }
-      current_pose = model.getCartPose(joints);
+    std::array<double, 7> joints{};
+    if (!read_current_joints(robot, joints)) {
+      print_err("read_current_joints");
+      return false;
     }
-    set_target_flange_pose(current_pose, true);
+    set_target_flange_pose(model.getCartPose(joints), true);
     if (!configure_rt_impedance()) {
       return false;
     }
@@ -687,7 +725,11 @@ int main(int argc, char **argv) {
         continue;
       }
 
-      if (!restart_rt_from_current()) {
+      set_target_flange_pose(preset_tf_arr, true);
+      if (!configure_rt_impedance()) {
+        continue;
+      }
+      if (!start_rt_loop()) {
         continue;
       }
 
@@ -806,11 +848,6 @@ int main(int argc, char **argv) {
         posture = current_posture;
       }
 
-      // Convert reported pose from flange to tool center point.
-      const auto flange_tf = posture_to_transform(posture);
-      const auto tool_tf = flange_tf * tf_f2t;
-      const auto tool_posture = transform_to_posture(tool_tf);
-
       if (cfg.enable_gripper && cfg.gripper_backend == GripperBackend::Rs485Epg) {
         int pos_now_raw = 0;
         if (read_modbus_input_reg(robot, cfg.gripper_rs485_slave_id, cfg.gripper_rs485_pos_now_reg, pos_now_raw, "epg_get_position")) {
@@ -831,8 +868,8 @@ int main(int argc, char **argv) {
       }
 
       std::cout << "STATE "
-                << tool_posture[0] << " " << tool_posture[1] << " " << tool_posture[2] << " "
-                << tool_posture[3] << " " << tool_posture[4] << " " << tool_posture[5] << " "
+                << posture[0] << " " << posture[1] << " " << posture[2] << " "
+                << posture[3] << " " << posture[4] << " " << posture[5] << " "
                 << gripper_pos << " " << gripper_force << std::endl;
       continue;
     }
