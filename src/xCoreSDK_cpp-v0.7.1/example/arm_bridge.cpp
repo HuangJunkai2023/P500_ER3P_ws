@@ -2,6 +2,8 @@
 #include <atomic>
 #include <algorithm>
 #include <chrono>
+#include <cmath>
+#include <functional>
 #include <iostream>
 #include <mutex>
 #include <sstream>
@@ -52,7 +54,13 @@ struct Config {
   double tcp_offset_z = 0.10;
   double move_speed = 300.0;
   double move_zone = 10.0;
+  double max_pos_speed = 0.18;
+  double max_rot_speed = 0.90;
+  double max_pos_accel = 0.90;
+  double max_rot_accel = 4.50;
   std::array<double, 7> preset_joints_deg = {0.0, 30.0, 0.0, 60.0, 0.0, 90.0, 0.0};
+  std::array<double, 6> cartesian_impedance = {1200.0, 1200.0, 250.0, 80.0, 80.0, 80.0};
+  std::array<double, 6> cartesian_impedance_desired_force = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 };
 
 bool parse_csv7(const std::string &text, std::array<double, 7> &out) {
@@ -65,6 +73,19 @@ bool parse_csv7(const std::string &text, std::array<double, 7> &out) {
   }
   if (vals.size() != 7) return false;
   for (size_t i = 0; i < 7; ++i) out[i] = vals[i];
+  return true;
+}
+
+bool parse_csv6(const std::string &text, std::array<double, 6> &out) {
+  std::stringstream ss(text);
+  std::string item;
+  std::vector<double> vals;
+  while (std::getline(ss, item, ',')) {
+    if (item.empty()) continue;
+    vals.push_back(std::stod(item));
+  }
+  if (vals.size() != 6) return false;
+  for (size_t i = 0; i < 6; ++i) out[i] = vals[i];
   return true;
 }
 
@@ -248,10 +269,20 @@ bool parse_args(int argc, char **argv, Config &cfg) {
         throw std::runtime_error("bad value for --preset-joints-deg, expected 7 comma-separated numbers");
       }
     }
-    else if (arg == "--max-pos-speed" || arg == "--max-rot-speed" ||
-             arg == "--max-pos-accel" || arg == "--max-rot-accel") {
-      (void)need_val(arg);
+    else if (arg == "--cartesian-impedance") {
+      if (!parse_csv6(need_val(arg), cfg.cartesian_impedance)) {
+        throw std::runtime_error("bad value for --cartesian-impedance, expected 6 comma-separated numbers");
+      }
     }
+    else if (arg == "--cartesian-impedance-desired-force") {
+      if (!parse_csv6(need_val(arg), cfg.cartesian_impedance_desired_force)) {
+        throw std::runtime_error("bad value for --cartesian-impedance-desired-force, expected 6 comma-separated numbers");
+      }
+    }
+    else if (arg == "--max-pos-speed") cfg.max_pos_speed = std::stod(need_val(arg));
+    else if (arg == "--max-rot-speed") cfg.max_rot_speed = std::stod(need_val(arg));
+    else if (arg == "--max-pos-accel") cfg.max_pos_accel = std::stod(need_val(arg));
+    else if (arg == "--max-rot-accel") cfg.max_rot_accel = std::stod(need_val(arg));
     else return false;
   }
   return true;
@@ -317,11 +348,31 @@ std::array<double, 6> transform_to_posture(const Eigen::Transform<double, 3, Eig
   return posture;
 }
 
+std::array<double, 16> transform_to_array(const Eigen::Transform<double, 3, Eigen::Isometry> &tf) {
+  std::array<double, 16> tf_array{};
+  const auto &mat = tf.matrix();
+  for (int r = 0; r < 4; ++r) {
+    for (int c = 0; c < 4; ++c) {
+      tf_array[4 * r + c] = mat(r, c);
+    }
+  }
+  return tf_array;
+}
+
 bool read_current_posture(xMateErProRobot &robot, std::array<double, 6> &posture) {
   try {
     std::array<double, 16> measured{};
     robot.getStateData(RtSupportedFields::tcpPose_m, measured);
     Utils::transArrayToPosture(measured, posture);
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool read_current_pose_matrix(xMateErProRobot &robot, std::array<double, 16> &pose) {
+  try {
+    robot.getStateData(RtSupportedFields::tcpPose_m, pose);
     return true;
   } catch (...) {
     return false;
@@ -409,50 +460,198 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  rtCon->setFilterLimit(false, cfg.filter_freq);
-
   const auto tf_f2t = flange_to_tool_tf(cfg.tcp_offset_z);
   const auto tf_t2f = tf_f2t.inverse();
 
   auto model = robot.model();
-  FollowPosition<7> follow_pose(robot, model);
-  follow_pose.setScale(cfg.follow_scale);
 
   const auto preset_joint_rad = Utils::degToRad(cfg.preset_joints_deg);
   const JointPosition preset_joint_pos(std::vector<double>(preset_joint_rad.begin(), preset_joint_rad.end()));
   const auto preset_tf_arr = model.getCartPose(preset_joint_rad);
   const auto preset_target_tf = trans_array_to_transform(preset_tf_arr);
 
-  std::atomic<bool> follow_started(false);
+  std::atomic<bool> rt_loop_running(false);
   std::array<double, 6> current_posture{};
-  std::mutex state_mutex;
-  std::chrono::steady_clock::time_point last_exec_tp = std::chrono::steady_clock::now();
-
-  if (read_current_posture(robot, current_posture)) {
-    try {
-      follow_pose.start(posture_to_transform(current_posture));
-      follow_started.store(true);
-    } catch (const std::exception &e) {
-      print_err(std::string("follow_start:") + e.what());
+  std::array<double, 16> target_flange_pose = preset_tf_arr;
+  if (!read_current_pose_matrix(robot, target_flange_pose)) {
+    std::array<double, 7> joints{};
+    if (read_current_joints(robot, joints)) {
+      target_flange_pose = model.getCartPose(joints);
     }
+  }
+  Eigen::Transform<double, 3, Eigen::Isometry> command_flange_tf = trans_array_to_transform(target_flange_pose);
+  std::mutex state_mutex;
+  std::mutex target_mutex;
+  std::chrono::steady_clock::time_point last_exec_tp = std::chrono::steady_clock::now();
+  std::chrono::steady_clock::time_point last_callback_tp = std::chrono::steady_clock::now();
+
+  auto configure_rt_impedance = [&]() -> bool {
+    robot.setRtNetworkTolerance(40.0, ec);
+    warn_ec(ec, "setRtNetworkTolerance");
+    robot.setMotionControlMode(MotionControlMode::RtCommand, ec);
+    if (!check_ec(ec, "setMotionControlMode(RtCommand)")) return false;
+    robot.setOperateMode(OperateMode::automatic, ec);
+    if (!check_ec(ec, "setOperateMode")) return false;
+    robot.setPowerState(true, ec);
+    if (!check_ec(ec, "setPowerState")) return false;
+
+    rtCon->setFilterLimit(false, cfg.filter_freq);
+    rtCon->setCartesianImpedance(cfg.cartesian_impedance, ec);
+    if (!check_ec(ec, "setCartesianImpedance")) return false;
+    rtCon->setCartesianImpedanceDesiredTorque(cfg.cartesian_impedance_desired_force, ec);
+    if (!check_ec(ec, "setCartesianImpedanceDesiredTorque")) return false;
+    return true;
+  };
+
+  std::function<CartesianPosition(void)> callback = [&]() -> CartesianPosition {
+    CartesianPosition output{};
+    {
+      std::lock_guard<std::mutex> lock(target_mutex);
+      auto now = std::chrono::steady_clock::now();
+      double dt = std::chrono::duration<double>(now - last_callback_tp).count();
+      if (dt <= 0.0 || dt > 0.02) {
+        dt = 0.001;
+      }
+      last_callback_tp = now;
+
+      const auto target_tf = trans_array_to_transform(target_flange_pose);
+
+      Eigen::Vector3d delta_pos = target_tf.translation() - command_flange_tf.translation();
+      const double delta_norm = delta_pos.norm();
+      const double max_pos_step = std::max(0.0, cfg.max_pos_speed) * dt;
+      if (delta_norm > max_pos_step && delta_norm > 1e-12) {
+        delta_pos *= max_pos_step / delta_norm;
+      }
+      command_flange_tf.translation() += delta_pos;
+
+      Eigen::Quaterniond q_cmd(command_flange_tf.linear());
+      Eigen::Quaterniond q_target(target_tf.linear());
+      q_cmd.normalize();
+      q_target.normalize();
+      if (q_cmd.dot(q_target) < 0.0) {
+        q_target.coeffs() *= -1.0;
+      }
+      const Eigen::AngleAxisd delta_rot(q_cmd.inverse() * q_target);
+      const double rot_angle = std::abs(delta_rot.angle());
+      const double max_rot_step = std::max(0.0, cfg.max_rot_speed) * dt;
+      double rot_ratio = 1.0;
+      if (rot_angle > max_rot_step && rot_angle > 1e-12) {
+        rot_ratio = max_rot_step / rot_angle;
+      }
+      const Eigen::Quaterniond q_next = q_cmd.slerp(rot_ratio, q_target);
+      command_flange_tf.linear() = q_next.normalized().toRotationMatrix();
+
+      output.pos = transform_to_array(command_flange_tf);
+    }
+    return output;
+  };
+
+  auto set_target_flange_pose = [&](const std::array<double, 16> &pose, bool reset_command = false) {
+    std::lock_guard<std::mutex> lock(target_mutex);
+    target_flange_pose = pose;
+    if (reset_command) {
+      command_flange_tf = trans_array_to_transform(pose);
+      last_callback_tp = std::chrono::steady_clock::now();
+    }
+  };
+
+  auto stop_rt_loop = [&]() {
+    if (!rt_loop_running.load()) {
+      return;
+    }
+    try {
+      rtCon->stopLoop();
+    } catch (const std::exception &e) {
+      std::cerr << "WARN stopLoop:" << e.what() << std::endl;
+    }
+    try {
+      rtCon->stopMove();
+    } catch (const std::exception &e) {
+      std::cerr << "WARN stopMove:" << e.what() << std::endl;
+    }
+    rt_loop_running.store(false);
+  };
+
+  auto start_rt_loop = [&]() -> bool {
+    try {
+      rtCon->setControlLoop(callback);
+      rtCon->startMove(RtControllerMode::cartesianImpedance);
+      rtCon->startLoop(false);
+      rt_loop_running.store(true);
+      return true;
+    } catch (const std::exception &e) {
+      print_err(std::string("rt_start:") + e.what());
+      rt_loop_running.store(false);
+      return false;
+    }
+  };
+
+  if (!configure_rt_impedance()) {
+    return 1;
+  }
+  if (!start_rt_loop()) {
+    return 1;
   }
 
   std::cout << "READY" << std::endl;
 
-  auto restart_follow_from_current = [&]() -> bool {
-    if (!read_current_posture(robot, current_posture)) {
-      print_err("read_current_posture");
+  auto restart_rt_from_current = [&]() -> bool {
+    std::array<double, 16> current_pose{};
+    if (!read_current_pose_matrix(robot, current_pose)) {
+      std::array<double, 7> joints{};
+      if (!read_current_joints(robot, joints)) {
+        print_err("read_current_pose");
+        return false;
+      }
+      current_pose = model.getCartPose(joints);
+    }
+    set_target_flange_pose(current_pose, true);
+    if (!configure_rt_impedance()) {
       return false;
     }
-    try {
-      follow_pose.setScale(cfg.follow_scale);
-      follow_pose.start(posture_to_transform(current_posture));
-      follow_started.store(true);
-      return true;
-    } catch (const std::exception &e) {
-      print_err(std::string("follow_restart:") + e.what());
+    return start_rt_loop();
+  };
+
+  auto execute_nrt_movel = [&](const Eigen::Transform<double, 3, Eigen::Isometry> &target_flange_tf,
+                               double speed, double zone) -> bool {
+    stop_rt_loop();
+
+    robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
+    if (!check_ec(ec, "setMotionControlMode(NrtCommand)")) {
+      restart_rt_from_current();
       return false;
     }
+    robot.setOperateMode(OperateMode::automatic, ec);
+    if (!check_ec(ec, "setOperateMode")) {
+      restart_rt_from_current();
+      return false;
+    }
+    robot.setPowerState(true, ec);
+    if (!check_ec(ec, "setPowerState")) {
+      restart_rt_from_current();
+      return false;
+    }
+
+    const auto target_posture = transform_to_posture(target_flange_tf);
+    MoveLCommand move_l(
+      CartesianPosition{
+        target_posture[0], target_posture[1], target_posture[2],
+        target_posture[3], target_posture[4], target_posture[5],
+      },
+      speed,
+      zone);
+    robot.executeCommand({move_l}, ec);
+    if (!check_ec(ec, "executeCommand(MoveLCommand)")) {
+      restart_rt_from_current();
+      return false;
+    }
+    if (!wait_robot_idle(robot, std::chrono::seconds(30))) {
+      print_err("wait_robot_idle_timeout");
+      restart_rt_from_current();
+      return false;
+    }
+
+    return restart_rt_from_current();
   };
 
   std::string line;
@@ -470,14 +669,7 @@ int main(int argc, char **argv) {
     iss >> cmd;
 
     if (cmd == "RESET") {
-      try {
-        if (follow_started.load()) {
-          follow_pose.stop();
-          follow_started.store(false);
-        }
-      } catch (const std::exception &e) {
-        print_err(std::string("follow_stop:") + e.what());
-      }
+      stop_rt_loop();
 
       // Use MoveAbsJ for reset so the arm moves smoothly in joint space to teleop preset.
       robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
@@ -495,16 +687,7 @@ int main(int argc, char **argv) {
         continue;
       }
 
-      robot.setRtNetworkTolerance(40.0, ec);
-      warn_ec(ec, "setRtNetworkTolerance");
-      robot.setMotionControlMode(MotionControlMode::RtCommand, ec);
-      if (!check_ec(ec, "setMotionControlMode(RtCommand)")) continue;
-      robot.setOperateMode(OperateMode::automatic, ec);
-      if (!check_ec(ec, "setOperateMode")) continue;
-      robot.setPowerState(true, ec);
-      if (!check_ec(ec, "setPowerState")) continue;
-
-      if (!restart_follow_from_current()) {
+      if (!restart_rt_from_current()) {
         continue;
       }
 
@@ -516,18 +699,7 @@ int main(int argc, char **argv) {
     }
 
     if (cmd == "PRESET") {
-      try {
-        if (!follow_started.load()) {
-          follow_pose.setScale(cfg.follow_scale);
-          follow_pose.start(preset_target_tf);
-          follow_started.store(true);
-        } else {
-          follow_pose.update(preset_target_tf);
-        }
-      } catch (const std::exception &e) {
-        print_err(std::string("preset_update:") + e.what());
-        continue;
-      }
+      set_target_flange_pose(transform_to_array(preset_target_tf));
       last_exec_tp = std::chrono::steady_clock::now();
       std::cout << "OK" << std::endl;
       continue;
@@ -566,18 +738,7 @@ int main(int argc, char **argv) {
       // while controller follows flange pose.
       target_tf = target_tf * tf_t2f;
 
-      try {
-        if (!follow_started.load()) {
-          follow_pose.setScale(cfg.follow_scale);
-          follow_pose.start(target_tf);
-          follow_started.store(true);
-        } else {
-          follow_pose.update(target_tf);
-        }
-      } catch (const std::exception &e) {
-        print_err(std::string("follow_update:") + e.what());
-        continue;
-      }
+      set_target_flange_pose(transform_to_array(target_tf));
 
       last_exec_tp = std::chrono::steady_clock::now();
       gripper_pos = grip;
@@ -604,16 +765,31 @@ int main(int argc, char **argv) {
         continue;
       }
 
-      try {
-        if (!follow_started.load()) {
-          follow_pose.setScale(cfg.follow_scale);
-          follow_pose.start(target_joints);
-          follow_started.store(true);
-        } else {
-          follow_pose.update(target_joints);
-        }
-      } catch (const std::exception &e) {
-        print_err(std::string("follow_joint_update:") + e.what());
+      set_target_flange_pose(model.getCartPose(target_joints));
+
+      last_exec_tp = std::chrono::steady_clock::now();
+      gripper_pos = grip;
+      set_gripper(robot, cfg, gripper_pos);
+      std::cout << "OK" << std::endl;
+      continue;
+    }
+
+    if (cmd == "MOVEL") {
+      double x, y, z, qx, qy, qz, qw, grip;
+      if (!(iss >> x >> y >> z >> qx >> qy >> qz >> qw >> grip)) {
+        print_err("bad_movel_args");
+        continue;
+      }
+
+      double speed = cfg.move_speed;
+      double zone = cfg.move_zone;
+      iss >> speed >> zone;
+
+      Eigen::Transform<double, 3, Eigen::Isometry> target_tf =
+        pose_quat_to_transform(x, y, z, qx, qy, qz, qw);
+      target_tf = target_tf * tf_t2f;
+
+      if (!execute_nrt_movel(target_tf, speed, zone)) {
         continue;
       }
 
@@ -698,12 +874,7 @@ int main(int argc, char **argv) {
     }
 
     if (cmd == "CLOSE") {
-      if (follow_started.load()) {
-        try {
-          follow_pose.stop();
-        } catch (...) {
-        }
-      }
+      stop_rt_loop();
       std::cout << "OK" << std::endl;
       break;
     }
@@ -711,6 +882,7 @@ int main(int argc, char **argv) {
     print_err("unknown_cmd");
   }
 
+  stop_rt_loop();
   robot.stopReceiveRobotState();
   robot.setMotionControlMode(MotionControlMode::NrtCommand, ec);
   warn_ec(ec, "setMotionControlMode(NrtCommand)");
